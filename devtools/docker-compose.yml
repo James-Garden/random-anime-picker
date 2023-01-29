@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+
+  postgres-db:
+    image: postgres:14.3-alpine
+    ports:
+      - target: 5432
+        published: 5434
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: dev1
+      POSTGRES_DB: random_anime_picker
