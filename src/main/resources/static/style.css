@@ -1,0 +1,11 @@
+body {
+    background-color: rgb(32, 33, 36);
+    color: white;
+    font-family: Tahoma, sans-serif;
+}
+
+main {
+    margin-left: auto;
+    margin-right: auto;
+    width: 960px;
+}
