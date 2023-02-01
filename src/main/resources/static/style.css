@@ -8,4 +8,40 @@ main {
     margin-left: auto;
     margin-right: auto;
     width: 960px;
+    padding-top: 400px;
+}
+
+/* Error styling */
+
+input.has-errors {
+    border-color: red;
+}
+
+label.has-errors {
+    color: red;
+}
+
+p.error-hint {
+    color: red;
+    font-size: small;
+}
+
+/* Submit button */
+
+.submit-button {
+    margin-top: 30px;
+    width: 100%;
+    background-color: rgb(34, 139, 34);
+    border: 0;
+    padding: 15px;
+    color: white;
+    font-size: 2rem;
+}
+
+.submit-button:hover {
+    background-color: rgb(24, 120, 34);
+}
+
+.submit-button:focus {
+    outline: yellow solid 3px;
 }

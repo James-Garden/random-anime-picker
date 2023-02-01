@@ -1,14 +1,14 @@
 <#--noinspection InjectedReferences-->
-<#include 'macros/_staticUrl.ftl'>
-
-<#import 'macros/_defaultHeader.ftl' as defaultHeader>
 <#import '/spring.ftl' as spring>
+<#import 'macros/forms/_forms.ftl' as forms>
+
+<#function staticUrl url>
+  <#return "/assets/${url}" >
+</#function>
+
 
 <#macro baseTemplate
   pageTitle=""
-  useHeader=true
-  headerContent=""
-  errorList={}
 >
   <!DOCTYPE html>
   <html lang="en">
@@ -19,15 +19,6 @@
     <link rel="icon" type="image/x-icon" href="${staticUrl("favicon.ico")}">
   </head>
     <body>
-      <#if useHeader>
-        <header>
-          <#if headerContent?has_content>
-            ${headerContent}
-          <#else>
-            <@defaultHeader.defaultHeader/>
-          </#if>
-        </header>
-      </#if>
       <main>
         <#nested>
       </main>
