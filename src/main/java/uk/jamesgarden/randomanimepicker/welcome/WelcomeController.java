@@ -13,22 +13,22 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/")
 public class WelcomeController {
 
-  private final UsernameFormValidator usernameFormValidator;
+  private final ListFilterFormValidator listFilterFormValidator;
 
   @Autowired
-  WelcomeController(UsernameFormValidator usernameFormValidator) {
-    this.usernameFormValidator = usernameFormValidator;
+  WelcomeController(ListFilterFormValidator listFilterFormValidator) {
+    this.listFilterFormValidator = listFilterFormValidator;
   }
 
   @GetMapping
-  ModelAndView renderWelcomePage(@ModelAttribute("form") UsernameForm form) {
+  ModelAndView renderWelcomePage(@ModelAttribute("form") ListFilterForm form) {
     return new ModelAndView("welcome");
   }
 
   @PostMapping
-  ModelAndView redirectToListEntry(@ModelAttribute("form") UsernameForm form,
+  ModelAndView redirectToListEntry(@ModelAttribute("form") ListFilterForm form,
                                    BindingResult bindingResult) {
-    usernameFormValidator.validate(form, bindingResult);
+    listFilterFormValidator.validate(form, bindingResult);
 
     if (bindingResult.hasErrors()) {
       return new ModelAndView("welcome");

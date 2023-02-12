@@ -7,11 +7,11 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 @Service
-public class UsernameFormValidator implements Validator {
+public class ListFilterFormValidator implements Validator {
 
   @Override
   public boolean supports(@NonNull Class<?> clazz) {
-    return UsernameForm.class.equals(clazz);
+    return ListFilterForm.class.equals(clazz);
   }
 
   @Override

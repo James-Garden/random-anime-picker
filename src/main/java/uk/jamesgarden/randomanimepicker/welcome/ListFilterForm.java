@@ -1,6 +1,6 @@
 package uk.jamesgarden.randomanimepicker.welcome;
 
-class UsernameForm {
+class ListFilterForm {
 
   private String username;
 
