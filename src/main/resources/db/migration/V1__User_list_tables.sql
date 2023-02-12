@@ -19,8 +19,6 @@ CREATE TABLE user_list_entries (
     anime_num_episodes INT,
     anime_airing_status INT,
     anime_id INT,
-    anime_studios TEXT,
-    anime_licensors TEXT,
     anime_total_members INT,
     anime_total_scores INT,
     anime_score_val DECIMAL,

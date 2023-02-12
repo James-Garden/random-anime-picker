@@ -43,8 +43,6 @@ public class ListEntry {
   private AnimeAiringStatus animeAiringStatus;
 
   private Integer animeId;
-  private String animeStudios;
-  private String animeLicensors;
   private Integer animeTotalMembers;
   private Integer animeTotalScores;
   private Double animeScoreVal;
@@ -97,8 +95,6 @@ public class ListEntry {
     listEntry.setAnimeNumEpisodes(listEntryDto.animeNumEpisodes());
     listEntry.setAnimeAiringStatus(AnimeAiringStatus.from(listEntryDto.animeAiringStatus()));
     listEntry.setAnimeId(listEntryDto.animeId());
-    listEntry.setAnimeStudios(listEntryDto.animeStudios());
-    listEntry.setAnimeLicensors(listEntryDto.animeLicensors());
     listEntry.setAnimeTotalMembers(listEntryDto.animeTotalMembers());
     listEntry.setAnimeTotalScores(listEntryDto.animeTotalScores());
     listEntry.setAnimeScoreVal(listEntryDto.animeScoreVal());
@@ -223,22 +219,6 @@ public class ListEntry {
 
   public void setAnimeId(Integer animeId) {
     this.animeId = animeId;
-  }
-
-  public String getAnimeStudios() {
-    return animeStudios;
-  }
-
-  public void setAnimeStudios(String animeStudios) {
-    this.animeStudios = animeStudios;
-  }
-
-  public String getAnimeLicensors() {
-    return animeLicensors;
-  }
-
-  public void setAnimeLicensors(String animeLicensors) {
-    this.animeLicensors = animeLicensors;
   }
 
   public Integer getAnimeTotalMembers() {
