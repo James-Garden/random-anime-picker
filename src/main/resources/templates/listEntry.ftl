@@ -1,5 +1,7 @@
 <#-- @ftlvariable name="username" type="String" -->
 <#-- @ftlvariable name="listEntry" type="uk.jamesgarden.randomanimepicker.listentry.ListEntry" -->
+<#-- @ftlvariable name="addedToList" type="String" -->
+
 <#include 'layout/base.ftl'>
 
 <#if listEntry.animeTitleEng?has_content>
@@ -36,7 +38,7 @@
         <@table.simpleRow keyText="Status" valueText=listEntry.status.displayName />
         <@table.simpleRow keyText="Score" valueText=listEntry.animeScoreVal />
         <@table.simpleRow keyText="Number of Episodes" valueText=listEntry.animeNumEpisodes />
-        <@table.simpleRow keyText="Date Added to List" valueText=listEntry.createdAt />
+        <@table.simpleRow keyText="Date Added to List" valueText=addedToList!"" />
         <@table.simpleRow keyText="Airing Status" valueText=listEntry.animeAiringStatus.displayName />
         <@table.simpleRow keyText="Age Rating" valueText=listEntry.animeMpaaRatingString!"" />
       </@table.table>

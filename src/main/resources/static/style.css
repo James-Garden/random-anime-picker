@@ -68,7 +68,8 @@ div.anime-image {
 }
 
 img.anime-image {
-    height: 450px;
+    max-height: 450px;
+    max-width: 400px;
 }
 
 .anime-info {

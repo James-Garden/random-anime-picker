@@ -8,9 +8,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.Instant;
 import java.util.UUID;
 import uk.jamesgarden.randomanimepicker.malrequest.ListEntryDto;
 import uk.jamesgarden.randomanimepicker.maluser.MalUser;
+import uk.jamesgarden.randomanimepicker.utils.DateUtils;
 
 @SuppressWarnings("unused")
 @Entity
@@ -31,8 +33,8 @@ public class ListEntry {
   private String tags;
   private Integer isRewatching;
   private Integer numWatchedEpisodes;
-  private Integer createdAt;
-  private Integer updatedAt;
+  private Instant createdAt;
+  private Instant updatedAt;
   private String animeTitle;
   private String animeTitleEng;
   private Integer animeNumEpisodes;
@@ -88,8 +90,8 @@ public class ListEntry {
     listEntry.setTags(listEntryDto.tags());
     listEntry.setIsRewatching(listEntryDto.isRewatching());
     listEntry.setNumWatchedEpisodes(listEntryDto.numWatchedEpisodes());
-    listEntry.setCreatedAt(listEntryDto.createdAt());
-    listEntry.setUpdatedAt(listEntryDto.updatedAt());
+    listEntry.setCreatedAt(DateUtils.instantFromEpochSecond(listEntryDto.createdAt()));
+    listEntry.setUpdatedAt(DateUtils.instantFromEpochSecond(listEntryDto.updatedAt()));
     listEntry.setAnimeTitle(listEntryDto.animeTitle());
     listEntry.setAnimeTitleEng(listEntryDto.animeTitleEng());
     listEntry.setAnimeNumEpisodes(listEntryDto.animeNumEpisodes());
@@ -167,19 +169,19 @@ public class ListEntry {
     this.numWatchedEpisodes = numWatchedEpisodes;
   }
 
-  public Integer getCreatedAt() {
+  public Instant getCreatedAt() {
     return createdAt;
   }
 
-  public void setCreatedAt(Integer createdAt) {
+  public void setCreatedAt(Instant createdAt) {
     this.createdAt = createdAt;
   }
 
-  public Integer getUpdatedAt() {
+  public Instant getUpdatedAt() {
     return updatedAt;
   }
 
-  public void setUpdatedAt(Integer updatedAt) {
+  public void setUpdatedAt(Instant updatedAt) {
     this.updatedAt = updatedAt;
   }
 
