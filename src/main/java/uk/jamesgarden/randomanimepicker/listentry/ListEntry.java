@@ -1,16 +1,20 @@
 package uk.jamesgarden.randomanimepicker.listentry;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.Instant;
 import java.util.UUID;
 import uk.jamesgarden.randomanimepicker.malrequest.ListEntryDto;
 import uk.jamesgarden.randomanimepicker.maluser.MalUser;
+import uk.jamesgarden.randomanimepicker.utils.DateUtils;
 
+@SuppressWarnings("unused")
 @Entity
 @Table(name = "user_list_entries")
 public class ListEntry {
@@ -23,17 +27,21 @@ public class ListEntry {
   @JoinColumn(name = "mal_user_id")
   private MalUser user;
 
-  private Integer status;
+  @Enumerated
+  private ListEntryStatus status;
   private Integer score;
   private String tags;
   private Integer isRewatching;
   private Integer numWatchedEpisodes;
-  private Integer createdAt;
-  private Integer updatedAt;
+  private Instant createdAt;
+  private Instant updatedAt;
   private String animeTitle;
   private String animeTitleEng;
   private Integer animeNumEpisodes;
-  private Integer animeAiringStatus;
+
+  @Enumerated
+  private AnimeAiringStatus animeAiringStatus;
+
   private Integer animeId;
   private String animeStudios;
   private String animeLicensors;
@@ -77,17 +85,17 @@ public class ListEntry {
 
   public static ListEntry from(ListEntryDto listEntryDto) {
     var listEntry = new ListEntry();
-    listEntry.setStatus(listEntryDto.status());
+    listEntry.setStatus(ListEntryStatus.from(listEntryDto.status()));
     listEntry.setScore(listEntryDto.score());
     listEntry.setTags(listEntryDto.tags());
     listEntry.setIsRewatching(listEntryDto.isRewatching());
     listEntry.setNumWatchedEpisodes(listEntryDto.numWatchedEpisodes());
-    listEntry.setCreatedAt(listEntryDto.createdAt());
-    listEntry.setUpdatedAt(listEntryDto.updatedAt());
+    listEntry.setCreatedAt(DateUtils.instantFromEpochSecond(listEntryDto.createdAt()));
+    listEntry.setUpdatedAt(DateUtils.instantFromEpochSecond(listEntryDto.updatedAt()));
     listEntry.setAnimeTitle(listEntryDto.animeTitle());
     listEntry.setAnimeTitleEng(listEntryDto.animeTitleEng());
     listEntry.setAnimeNumEpisodes(listEntryDto.animeNumEpisodes());
-    listEntry.setAnimeAiringStatus(listEntryDto.animeAiringStatus());
+    listEntry.setAnimeAiringStatus(AnimeAiringStatus.from(listEntryDto.animeAiringStatus()));
     listEntry.setAnimeId(listEntryDto.animeId());
     listEntry.setAnimeStudios(listEntryDto.animeStudios());
     listEntry.setAnimeLicensors(listEntryDto.animeLicensors());
@@ -100,7 +108,12 @@ public class ListEntry {
     listEntry.setVideoUrl(listEntryDto.videoUrl());
     listEntry.setTitleLocalized(listEntryDto.titleLocalized());
     listEntry.setAnimeUrl(listEntryDto.animeUrl());
-    listEntry.setAnimeImagePath(listEntryDto.animeImagePath());
+    {
+      var largeAnimeImage = listEntryDto.animeImagePath()
+          .replace("/r/192x272", "")
+          .replaceFirst("/images/anime/\\d+/\\d+", "$0l");
+      listEntry.setAnimeImagePath(largeAnimeImage);
+    }
     listEntry.setAddedToList(listEntryDto.isAddedToList());
     listEntry.setAnimeMediaTypeString(listEntryDto.animeMediaTypeString());
     listEntry.setAnimeMpaaRatingString(listEntryDto.animeMpaaRatingString());
@@ -116,11 +129,11 @@ public class ListEntry {
     return listEntry;
   }
 
-  public Integer getStatus() {
+  public ListEntryStatus getStatus() {
     return status;
   }
 
-  public void setStatus(Integer status) {
+  public void setStatus(ListEntryStatus status) {
     this.status = status;
   }
 
@@ -156,19 +169,19 @@ public class ListEntry {
     this.numWatchedEpisodes = numWatchedEpisodes;
   }
 
-  public Integer getCreatedAt() {
+  public Instant getCreatedAt() {
     return createdAt;
   }
 
-  public void setCreatedAt(Integer createdAt) {
+  public void setCreatedAt(Instant createdAt) {
     this.createdAt = createdAt;
   }
 
-  public Integer getUpdatedAt() {
+  public Instant getUpdatedAt() {
     return updatedAt;
   }
 
-  public void setUpdatedAt(Integer updatedAt) {
+  public void setUpdatedAt(Instant updatedAt) {
     this.updatedAt = updatedAt;
   }
 
@@ -196,11 +209,11 @@ public class ListEntry {
     this.animeNumEpisodes = animeNumEpisodes;
   }
 
-  public Integer getAnimeAiringStatus() {
+  public AnimeAiringStatus getAnimeAiringStatus() {
     return animeAiringStatus;
   }
 
-  public void setAnimeAiringStatus(Integer animeAiringStatus) {
+  public void setAnimeAiringStatus(AnimeAiringStatus animeAiringStatus) {
     this.animeAiringStatus = animeAiringStatus;
   }
 

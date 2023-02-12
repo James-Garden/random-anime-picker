@@ -1,6 +1,8 @@
 <#--noinspection InjectedReferences-->
 <#import '/spring.ftl' as spring>
 <#import 'macros/forms/_forms.ftl' as forms>
+<#import 'macros/image.ftl' as image>
+<#import 'macros/table.ftl' as table>
 
 <#function staticUrl url>
   <#return "/assets/${url}" >

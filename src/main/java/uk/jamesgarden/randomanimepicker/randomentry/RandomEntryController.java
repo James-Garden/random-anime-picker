@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import uk.jamesgarden.randomanimepicker.listupdate.ListUpdateService;
 import uk.jamesgarden.randomanimepicker.maluser.MalUserService;
+import uk.jamesgarden.randomanimepicker.utils.DateUtils;
 
 @Controller
 @RequestMapping("/{username}")
@@ -39,8 +40,11 @@ class RandomEntryController {
             "Could not find any list entries for user with ID [%s]".formatted(user.getId().toString())
         ));
 
+
+
     return new ModelAndView("listEntry")
         .addObject("username", username)
-        .addObject("listEntry", listEntry);
+        .addObject("listEntry", listEntry)
+        .addObject("addedToList", DateUtils.instantToDate(listEntry.getCreatedAt()));
   }
 }

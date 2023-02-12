@@ -17,6 +17,10 @@ input.has-errors {
     border-color: red;
 }
 
+input:focus {
+    outline: rgb(255, 221, 0) solid 3px;
+}
+
 label.has-errors {
     color: red;
 }
@@ -43,5 +47,43 @@ p.error-hint {
 }
 
 .submit-button:focus {
-    outline: yellow solid 3px;
+    outline: rgb(255, 221, 0) solid 3px;
+    border-color: rgb(32, 33, 36);
+    border-width: 2px;
+    border-style: solid;
+}
+
+/* List entry */
+
+.list-entry {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto;
+    gap: 10px;
+    padding: 10px;
+}
+
+div.anime-image {
+    grid-column: 1 / 3;
+    width: 100%;
+}
+
+img.anime-image {
+    max-height: 450px;
+    max-width: 400px;
+}
+
+.anime-info {
+    grid-column: 3 / 7;
+}
+
+.anime-details {
+    width: 100%;
+}
+
+.table-row-value {
+    text-align: right;
+}
+
+td {
+    padding: 5px;
 }
