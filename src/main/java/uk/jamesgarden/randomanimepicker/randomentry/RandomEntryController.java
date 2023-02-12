@@ -37,10 +37,7 @@ class RandomEntryController {
     }
     var listEntry = randomEntryService.getRandomListEntryForUser(user)
         .orElseThrow(() -> new EntityNotFoundException(
-            "Could not find any list entries for user with ID [%s]".formatted(user.getId().toString())
-        ));
-
-
+            "Could not find any list entries for user with ID [%s]".formatted(user.getId().toString())));
 
     return new ModelAndView("listEntry")
         .addObject("username", username)
