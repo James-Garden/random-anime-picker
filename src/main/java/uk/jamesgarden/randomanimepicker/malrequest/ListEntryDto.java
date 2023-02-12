@@ -1,4 +1,4 @@
-package uk.jamesgarden.randomanimepicker.listentry;
+package uk.jamesgarden.randomanimepicker.malrequest;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record UserListEntryJson(
+public record ListEntryDto(
     @JsonProperty("status") Integer status,
     @JsonProperty("score") Integer score,
     @JsonProperty("tags") String tags,
     @JsonProperty("is_rewatching") Integer isRewatching,
-    @JsonProperty("num_episodes_watched") Integer numEpisodesWatched,
-    @JsonProperty("created_at_epoch") Integer createdAtEpoch,
-    @JsonProperty("updated_at_epoch") Integer updatedAtEpoch,
+    @JsonProperty("num_watched_episodes") Integer numWatchedEpisodes,
+    @JsonProperty("created_at") Integer createdAt,
+    @JsonProperty("updated_at") Integer updatedAt,
     @JsonProperty("anime_title") String animeTitle,
     @JsonProperty("anime_title_eng") String animeTitleEng,
     @JsonProperty("anime_num_episodes") Integer animeNumEpisodes,
