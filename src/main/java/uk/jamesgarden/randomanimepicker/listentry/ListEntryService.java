@@ -27,8 +27,8 @@ public class ListEntryService {
         .toList();
   }
 
-  public List<UUID> getUserListEntryIds(MalUser user) {
-    return listEntryRepository.findAllListEntryIdsByUser(user);
+  public List<ListEntry> getUserListEntries(MalUser user) {
+    return listEntryRepository.findAllByUser(user);
   }
 
   public Optional<ListEntry> findListEntryById(UUID id) {

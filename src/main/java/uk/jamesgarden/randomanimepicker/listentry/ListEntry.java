@@ -1,6 +1,7 @@
 package uk.jamesgarden.randomanimepicker.listentry;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,6 +12,7 @@ import java.util.UUID;
 import uk.jamesgarden.randomanimepicker.malrequest.ListEntryDto;
 import uk.jamesgarden.randomanimepicker.maluser.MalUser;
 
+@SuppressWarnings("unused")
 @Entity
 @Table(name = "user_list_entries")
 public class ListEntry {
@@ -23,7 +25,8 @@ public class ListEntry {
   @JoinColumn(name = "mal_user_id")
   private MalUser user;
 
-  private Integer status;
+  @Enumerated
+  private ListEntryStatus status;
   private Integer score;
   private String tags;
   private Integer isRewatching;
@@ -33,7 +36,10 @@ public class ListEntry {
   private String animeTitle;
   private String animeTitleEng;
   private Integer animeNumEpisodes;
-  private Integer animeAiringStatus;
+
+  @Enumerated
+  private AnimeAiringStatus animeAiringStatus;
+
   private Integer animeId;
   private String animeStudios;
   private String animeLicensors;
@@ -77,7 +83,7 @@ public class ListEntry {
 
   public static ListEntry from(ListEntryDto listEntryDto) {
     var listEntry = new ListEntry();
-    listEntry.setStatus(listEntryDto.status());
+    listEntry.setStatus(ListEntryStatus.from(listEntryDto.status()));
     listEntry.setScore(listEntryDto.score());
     listEntry.setTags(listEntryDto.tags());
     listEntry.setIsRewatching(listEntryDto.isRewatching());
@@ -87,7 +93,7 @@ public class ListEntry {
     listEntry.setAnimeTitle(listEntryDto.animeTitle());
     listEntry.setAnimeTitleEng(listEntryDto.animeTitleEng());
     listEntry.setAnimeNumEpisodes(listEntryDto.animeNumEpisodes());
-    listEntry.setAnimeAiringStatus(listEntryDto.animeAiringStatus());
+    listEntry.setAnimeAiringStatus(AnimeAiringStatus.from(listEntryDto.animeAiringStatus()));
     listEntry.setAnimeId(listEntryDto.animeId());
     listEntry.setAnimeStudios(listEntryDto.animeStudios());
     listEntry.setAnimeLicensors(listEntryDto.animeLicensors());
@@ -100,7 +106,12 @@ public class ListEntry {
     listEntry.setVideoUrl(listEntryDto.videoUrl());
     listEntry.setTitleLocalized(listEntryDto.titleLocalized());
     listEntry.setAnimeUrl(listEntryDto.animeUrl());
-    listEntry.setAnimeImagePath(listEntryDto.animeImagePath());
+    {
+      var largeAnimeImage = listEntryDto.animeImagePath()
+          .replace("/r/192x272", "")
+          .replaceFirst("/images/anime/\\d+/\\d+", "$0l");
+      listEntry.setAnimeImagePath(largeAnimeImage);
+    }
     listEntry.setAddedToList(listEntryDto.isAddedToList());
     listEntry.setAnimeMediaTypeString(listEntryDto.animeMediaTypeString());
     listEntry.setAnimeMpaaRatingString(listEntryDto.animeMpaaRatingString());
@@ -116,11 +127,11 @@ public class ListEntry {
     return listEntry;
   }
 
-  public Integer getStatus() {
+  public ListEntryStatus getStatus() {
     return status;
   }
 
-  public void setStatus(Integer status) {
+  public void setStatus(ListEntryStatus status) {
     this.status = status;
   }
 
@@ -196,11 +207,11 @@ public class ListEntry {
     this.animeNumEpisodes = animeNumEpisodes;
   }
 
-  public Integer getAnimeAiringStatus() {
+  public AnimeAiringStatus getAnimeAiringStatus() {
     return animeAiringStatus;
   }
 
-  public void setAnimeAiringStatus(Integer animeAiringStatus) {
+  public void setAnimeAiringStatus(AnimeAiringStatus animeAiringStatus) {
     this.animeAiringStatus = animeAiringStatus;
   }
 

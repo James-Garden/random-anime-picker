@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.jamesgarden.randomanimepicker.listentry.ListEntry;
 import uk.jamesgarden.randomanimepicker.listentry.ListEntryService;
+import uk.jamesgarden.randomanimepicker.listentry.ListEntryStatus;
 import uk.jamesgarden.randomanimepicker.maluser.MalUser;
 
 @Service
@@ -21,11 +22,14 @@ class RandomEntryService {
   }
 
   public Optional<ListEntry> getRandomListEntryForUser(MalUser user) {
-    var listEntryIds = listEntryService.getUserListEntryIds(user);
-    if (listEntryIds.isEmpty()) {
+    var listEntries = listEntryService.getUserListEntries(user);
+    if (listEntries.isEmpty()) {
       return Optional.empty();
     }
-    var randomEntryId = listEntryIds.get(RANDOM.nextInt(listEntryIds.size()));
-    return listEntryService.findListEntryById(randomEntryId);
+    var filteredList = listEntries.stream()
+        .filter(listEntry -> ListEntryStatus.PLANNED.equals(listEntry.getStatus()))
+        .toList();
+    var randomEntry = filteredList.get(RANDOM.nextInt(filteredList.size()));
+    return Optional.of(randomEntry);
   }
 }
