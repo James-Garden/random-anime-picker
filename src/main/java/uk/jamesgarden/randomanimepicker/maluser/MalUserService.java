@@ -36,4 +36,8 @@ public class MalUserService {
     user.setLastUpdated(clock.instant());
     malUserRepository.save(user);
   }
+
+  public boolean existsByUsername(String username) {
+    return malUserRepository.existsByUsername(username);
+  }
 }

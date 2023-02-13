@@ -8,4 +8,5 @@ interface MalUserRepository extends CrudRepository<MalUser, UUID> {
 
   Optional<MalUser> getByUsername(String username);
 
+  boolean existsByUsername(String username);
 }
