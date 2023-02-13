@@ -28,7 +28,8 @@ class RandomEntryController {
   @Autowired
   RandomEntryController(MalUserService malUserService,
                         ListUpdateService listUpdateService,
-                        RandomEntryService randomEntryService, ListFilterFormValidator listFilterFormValidator) {
+                        RandomEntryService randomEntryService,
+                        ListFilterFormValidator listFilterFormValidator) {
     this.malUserService = malUserService;
     this.listUpdateService = listUpdateService;
     this.randomEntryService = randomEntryService;
