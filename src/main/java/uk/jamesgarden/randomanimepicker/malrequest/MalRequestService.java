@@ -5,25 +5,25 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import uk.jamesgarden.randomanimepicker.utils.UrlUtils;
 
 @Service
 public class MalRequestService {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
   private static final RestTemplate TEMPLATE = new RestTemplate();
-  private static final String BASE_URL = "https://myanimelist.net/animelist/%s/load.json?offset=%d";
   private static final Integer OFFSET = 300;
-  private static final Random RANDOM = new Random();
 
   public List<ListEntryDto> getUserList(String username) throws JsonProcessingException {
     var userList = new ArrayList<ListEntryDto>();
+    var baseUrl = UrlUtils.getListUrl(username);
+    baseUrl += "/load.json?offset=%d";
 
     List<ListEntryDto> userListPart;
     do {
-      var url = BASE_URL.formatted(username, userList.size());
+      var url = baseUrl.formatted(userList.size());
       var jsonResponse = TEMPLATE.getForObject(url, String.class);
       userListPart = MAPPER.readValue(jsonResponse, new TypeReference<>() {});
 
@@ -31,10 +31,6 @@ public class MalRequestService {
     } while (userListPart.size() == OFFSET);
 
     return userList;
-  }
-
-  public ListEntryDto getRandomListEntry(List<ListEntryDto> userList) {
-    return userList.get(RANDOM.nextInt(userList.size()));
   }
 
 
