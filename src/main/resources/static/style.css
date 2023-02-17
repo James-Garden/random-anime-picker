@@ -102,6 +102,10 @@ td {
     padding-top: 10px;
 }
 
+.new-random-entry-form {
+    padding: 10px;
+}
+
 /* Update list */
 
 .list-update {
@@ -114,11 +118,12 @@ td {
     color: grey;
 }
 
-.update-list-button {
+/* Secondary link */
+
+.secondary-link {
     background-color: transparent;
     border: none;
     padding: 0;
-    font-family: arial, sans-serif;
     text-decoration: underline;
     cursor: pointer;
     color: grey;
@@ -126,6 +131,13 @@ td {
     font-size: 1em;
 }
 
-button:focus.update-list-button {
+:focus.secondary-link {
     color: white;
+}
+
+/* MyAnimeList link */
+
+div.my-anime-list-link {
+    padding: 10px;
+    text-align: center;
 }
