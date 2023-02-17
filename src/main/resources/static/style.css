@@ -126,6 +126,6 @@ td {
     font-size: 1em;
 }
 
-button:focus {
+button:focus.update-list-button {
     color: white;
 }
