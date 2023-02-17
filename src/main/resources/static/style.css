@@ -8,18 +8,7 @@ main {
     margin-left: auto;
     margin-right: auto;
     width: 960px;
-}
-
-header {
-    margin-left: auto;
-    margin-right: auto;
-    width: fit-content;
-}
-
-a.site-title {
-    text-decoration: none;
-    font-size: 2em;
-    color: grey;
+    padding-top: 350px;
 }
 
 /* Error styling */
@@ -110,7 +99,7 @@ img.anime-image {
 }
 
 td {
-    padding: 5px;
+    padding-top: 10px;
 }
 
 /* Update list */

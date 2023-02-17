@@ -2,7 +2,6 @@
 
 <@baseTemplate
   pageTitle="Random Anime Picker"
-  showHeader=false
 >
   <div class="welcome-wrapper">
     <div>

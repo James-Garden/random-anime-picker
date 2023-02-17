@@ -11,7 +11,6 @@
 
 <#macro baseTemplate
   pageTitle=""
-  showHeader=true
 >
   <!DOCTYPE html>
   <html lang="en">
@@ -22,10 +21,7 @@
     <link rel="icon" type="image/x-icon" href="https://spring.io/favicon.svg">
   </head>
     <body>
-      <#if showHeader>
-        <header><a href="/" class="site-title">Random Anime Picker</a></header>
-      </#if>
-      <main style="padding-top: ${showHeader?then("360", "400")}px;">
+      <main>
         <#nested>
       </main>
     </body>
