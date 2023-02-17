@@ -20,7 +20,11 @@
       </span>
       <span class="list-update__update-now">
         <@forms.htmlForm actionUrl=updateListUrl>
-          <@forms.submitButton class="update-list-button">Refresh list</@forms.submitButton>
+          <#if isListUpdatable>
+            <@forms.submitButton class="update-list-button">
+              Refresh list
+            </@forms.submitButton>
+          </#if>
         </@forms.htmlForm>
       </span>
     </div>

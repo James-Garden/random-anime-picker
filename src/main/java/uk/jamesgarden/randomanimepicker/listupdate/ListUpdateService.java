@@ -1,7 +1,11 @@
 package uk.jamesgarden.randomanimepicker.listupdate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import java.time.Clock;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +21,29 @@ import uk.jamesgarden.randomanimepicker.maluser.MalUserService;
 public class ListUpdateService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ListUpdateService.class);
+  private static final Duration RATE_LIMIT = Duration.of(15, ChronoUnit.MINUTES);
+
   private final MalRequestService malRequestService;
   private final ListEntryService listEntryService;
   private final MalUserService malUserService;
+  private final Clock clock;
 
   @Autowired
   ListUpdateService(MalRequestService malRequestService,
-                    ListEntryService listEntryService, MalUserService malUserService) {
+                    ListEntryService listEntryService,
+                    MalUserService malUserService,
+                    Clock clock) {
     this.malRequestService = malRequestService;
     this.listEntryService = listEntryService;
     this.malUserService = malUserService;
+    this.clock = clock;
+  }
+
+  public boolean isListUpdatable(MalUser user) {
+    if (Objects.isNull(user.getLastUpdated())) {
+      return true;
+    }
+    return clock.instant().minus(RATE_LIMIT).isAfter(user.getLastUpdated());
   }
 
   public void updateList(MalUser user) {

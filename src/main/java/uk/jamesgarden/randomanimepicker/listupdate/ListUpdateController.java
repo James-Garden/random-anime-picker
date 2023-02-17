@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import uk.jamesgarden.randomanimepicker.exception.RateLimitException;
 import uk.jamesgarden.randomanimepicker.maluser.MalUserService;
 
 @Controller
@@ -25,6 +26,10 @@ public class ListUpdateController {
   @PostMapping
   ModelAndView updateListAndRedirect(@PathVariable("username") String username) {
     var user = malUserService.getByUsername(username);
+
+    if (!listUpdateService.isListUpdatable(user)) {
+      throw new RateLimitException("Refused to update list for user with username '%s'".formatted(username));
+    }
     listUpdateService.updateList(user);
 
     return new ModelAndView("redirect:/%s".formatted(username));

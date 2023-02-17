@@ -30,6 +30,10 @@ p.error-hint {
     font-size: small;
 }
 
+button:disabled {
+    cursor: not-allowed;
+}
+
 /* Welcome page */
 
 div.welcome-inner-wrapper {
@@ -126,6 +130,6 @@ td {
     font-size: 1em;
 }
 
-button:focus {
+button:focus.update-list-button {
     color: white;
 }
