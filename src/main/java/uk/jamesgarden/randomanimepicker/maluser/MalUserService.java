@@ -2,8 +2,10 @@ package uk.jamesgarden.randomanimepicker.maluser;
 
 import jakarta.transaction.Transactional;
 import java.time.Clock;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uk.jamesgarden.randomanimepicker.exception.NotFoundException;
 
 @Service
 public class MalUserService {
@@ -19,7 +21,7 @@ public class MalUserService {
 
   @Transactional
   public MalUser getOrCreateUser(String username) {
-    var existingUser = malUserRepository.getByUsername(username);
+    var existingUser = findByUsername(username);
     return existingUser.orElseGet(() -> createUser(username));
   }
 
@@ -39,5 +41,14 @@ public class MalUserService {
 
   public boolean existsByUsername(String username) {
     return malUserRepository.existsByUsername(username);
+  }
+
+  public MalUser getByUsername(String username) {
+    return findByUsername(username).orElseThrow(() ->
+        new NotFoundException("Could not find list for user with name '%s'".formatted(username)));
+  }
+
+  private Optional<MalUser> findByUsername(String username) {
+    return malUserRepository.findByUsername(username);
   }
 }

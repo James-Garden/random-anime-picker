@@ -15,24 +15,24 @@ import uk.jamesgarden.randomanimepicker.maluser.MalUserService;
 import uk.jamesgarden.randomanimepicker.utils.UrlUtils;
 
 @Service
-public class ListFilterFormValidator implements Validator {
+public class WelcomeFormValidator implements Validator {
 
   private static final String USERNAME_FIELD = "username";
   private final MalUserService malUserService;
 
   @Autowired
-  public ListFilterFormValidator(MalUserService malUserService) {
+  public WelcomeFormValidator(MalUserService malUserService) {
     this.malUserService = malUserService;
   }
 
   @Override
   public boolean supports(@NonNull Class<?> clazz) {
-    return ListFilterForm.class.equals(clazz);
+    return WelcomeForm.class.equals(clazz);
   }
 
   @Override
   public void validate(@NonNull Object target, @NonNull Errors errors) {
-    var form = (ListFilterForm) target;
+    var form = (WelcomeForm) target;
 
     ValidationUtils.rejectIfEmpty(
         errors,

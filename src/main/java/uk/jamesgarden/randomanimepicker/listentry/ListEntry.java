@@ -12,7 +12,7 @@ import java.time.Instant;
 import java.util.UUID;
 import uk.jamesgarden.randomanimepicker.malrequest.ListEntryDto;
 import uk.jamesgarden.randomanimepicker.maluser.MalUser;
-import uk.jamesgarden.randomanimepicker.utils.DateUtils;
+import uk.jamesgarden.randomanimepicker.utils.TimestampUtils;
 
 @SuppressWarnings("unused")
 @Entity
@@ -88,8 +88,8 @@ public class ListEntry {
     listEntry.setTags(listEntryDto.tags());
     listEntry.setIsRewatching(listEntryDto.isRewatching());
     listEntry.setNumWatchedEpisodes(listEntryDto.numWatchedEpisodes());
-    listEntry.setCreatedAt(DateUtils.instantFromEpochSecond(listEntryDto.createdAt()));
-    listEntry.setUpdatedAt(DateUtils.instantFromEpochSecond(listEntryDto.updatedAt()));
+    listEntry.setCreatedAt(TimestampUtils.instantFromEpochSecond(listEntryDto.createdAt()));
+    listEntry.setUpdatedAt(TimestampUtils.instantFromEpochSecond(listEntryDto.updatedAt()));
     listEntry.setAnimeTitle(listEntryDto.animeTitle());
     listEntry.setAnimeTitleEng(listEntryDto.animeTitleEng());
     listEntry.setAnimeNumEpisodes(listEntryDto.animeNumEpisodes());

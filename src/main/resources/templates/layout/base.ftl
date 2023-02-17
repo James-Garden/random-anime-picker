@@ -18,7 +18,7 @@
     <meta charset="UTF-8">
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${staticUrl("style.css")}">
-    <link rel="icon" type="image/x-icon" href="${staticUrl("favicon.ico")}">
+    <link rel="icon" type="image/x-icon" href="https://spring.io/favicon.svg">
   </head>
     <body>
       <main>

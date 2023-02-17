@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 interface MalUserRepository extends CrudRepository<MalUser, UUID> {
 
-  Optional<MalUser> getByUsername(String username);
+  Optional<MalUser> findByUsername(String username);
 
   boolean existsByUsername(String username);
 }
