@@ -21,7 +21,7 @@
       <span class="list-update__update-now">
         <@forms.htmlForm actionUrl=updateListUrl>
           <#if isListUpdatable>
-            <@forms.submitButton class="update-list-button">
+            <@forms.submitButton class="secondary-link">
               Refresh list
             </@forms.submitButton>
           </#if>
@@ -64,6 +64,9 @@
       <@forms.htmlForm method="get">
         <@forms.submitButton>Go!</@forms.submitButton>
       </@forms.htmlForm>
+    </div>
+    <div class="my-anime-list-link">
+      <a href="https://myanimelist.net${listEntry.animeUrl}" class="secondary-link">View on MyAnimeList</a>
     </div>
   </div>
 </@baseTemplate>
