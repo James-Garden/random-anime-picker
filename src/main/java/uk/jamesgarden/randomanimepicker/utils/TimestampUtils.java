@@ -29,6 +29,4 @@ public class TimestampUtils {
   public static String formatTimeSince(Instant instant) {
     return TIME_FORMATTER.format(instant);
   }
-
-
 }
