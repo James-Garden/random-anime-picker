@@ -11,6 +11,7 @@
 
 <#macro baseTemplate
   pageTitle=""
+  showHeader=true
 >
   <!DOCTYPE html>
   <html lang="en">
@@ -18,10 +19,13 @@
     <meta charset="UTF-8">
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${staticUrl("style.css")}">
-    <link rel="icon" type="image/x-icon" href="${staticUrl("favicon.ico")}">
+    <link rel="icon" type="image/x-icon" href="https://spring.io/favicon.svg">
   </head>
     <body>
-      <main>
+      <#if showHeader>
+        <header><a href="/" class="site-title">Random Anime Picker</a></header>
+      </#if>
+      <main style="padding-top: ${showHeader?then("360", "400")}px;">
         <#nested>
       </main>
     </body>

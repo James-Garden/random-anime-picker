@@ -8,7 +8,18 @@ main {
     margin-left: auto;
     margin-right: auto;
     width: 960px;
-    padding-top: 400px;
+}
+
+header {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+}
+
+a.site-title {
+    text-decoration: none;
+    font-size: 2em;
+    color: grey;
 }
 
 /* Error styling */
@@ -28,6 +39,19 @@ label.has-errors {
 p.error-hint {
     color: red;
     font-size: small;
+}
+
+/* Welcome page */
+
+div.welcome-inner-wrapper {
+    margin-top: 50px;
+    width: 100%;
+    padding: 50px;
+    text-align: left;
+}
+
+div.welcome-wrapper {
+    text-align: center;
 }
 
 /* Submit button */
@@ -87,4 +111,32 @@ img.anime-image {
 
 td {
     padding: 5px;
+}
+
+/* Update list */
+
+.list-update {
+    display: flex;
+    padding: 10px;
+}
+
+.list-update__last-updated {
+    flex-grow: 1;
+    color: grey;
+}
+
+.update-list-button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    font-family: arial, sans-serif;
+    text-decoration: underline;
+    cursor: pointer;
+    color: grey;
+    /*font-weight: bold;*/
+    font-size: 1em;
+}
+
+button:focus {
+    color: white;
 }

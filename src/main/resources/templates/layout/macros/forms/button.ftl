@@ -1,3 +1,3 @@
-<#macro submitButton>
-  <button type="submit" class="submit-button">Go!</button>
+<#macro submitButton class="submit-button">
+  <button type="submit" class="${class}"><#nested></button>
 </#macro>

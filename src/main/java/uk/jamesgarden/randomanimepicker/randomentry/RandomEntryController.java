@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import uk.jamesgarden.randomanimepicker.maluser.MalUserService;
-import uk.jamesgarden.randomanimepicker.utils.DateUtils;
+import uk.jamesgarden.randomanimepicker.utils.TimestampUtils;
 
 @Controller
 @RequestMapping("/{username}")
@@ -30,10 +30,13 @@ class RandomEntryController {
     var listEntry = randomEntryService.getRandomListEntryForUser(user)
         .orElseThrow(() -> new EntityNotFoundException(
             "Could not find any list entries for user with ID [%s]".formatted(user.getId().toString())));
+    var lastUpdated = TimestampUtils.formatTimeSince(user.getLastUpdated());
 
     return new ModelAndView("listEntry")
         .addObject("username", username)
         .addObject("listEntry", listEntry)
-        .addObject("addedToList", DateUtils.instantToDate(listEntry.getCreatedAt()));
+        .addObject("addedToList", TimestampUtils.instantToDate(listEntry.getCreatedAt()))
+        .addObject("updateListUrl", "/%s/update-list".formatted(username))
+        .addObject("lastUpdated", lastUpdated);
   }
 }

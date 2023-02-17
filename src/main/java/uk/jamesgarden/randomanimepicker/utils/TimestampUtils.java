@@ -4,8 +4,12 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Objects;
+import org.ocpsoft.prettytime.PrettyTime;
 
-public class DateUtils {
+public class TimestampUtils {
+
+  private static final PrettyTime TIME_FORMATTER = new PrettyTime();
+
   public static String instantToDate(Instant instant) {
     if (Objects.isNull(instant)) {
       return null;
@@ -21,4 +25,10 @@ public class DateUtils {
     }
     return Instant.ofEpochSecond(epochSecond);
   }
+
+  public static String formatTimeSince(Instant instant) {
+    return TIME_FORMATTER.format(instant);
+  }
+
+
 }

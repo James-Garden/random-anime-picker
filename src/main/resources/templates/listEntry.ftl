@@ -14,6 +14,17 @@
   pageTitle=pageTitle
 >
   <div class="list-entry">
+    <div class="list-update">
+      <span class="list-update__last-updated">
+        Last updated ${lastUpdated}
+      </span>
+      <span class="list-update__update-now">
+        <@forms.htmlForm actionUrl=updateListUrl>
+          <@forms.submitButton class="update-list-button">Refresh list</@forms.submitButton>
+        </@forms.htmlForm>
+      </span>
+    </div>
+
     <div class="list-entry-inner-wrapper">
       <div class="anime-image">
         <@image.image
@@ -47,7 +58,7 @@
     </div>
     <div class="new-random-entry-form">
       <@forms.htmlForm method="get">
-        <@forms.submitButton />
+        <@forms.submitButton>Go!</@forms.submitButton>
       </@forms.htmlForm>
     </div>
   </div>
