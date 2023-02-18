@@ -29,6 +29,9 @@ class RandomEntryService {
     var filteredList = listEntries.stream()
         .filter(listEntry -> ListEntryStatus.PLANNED.equals(listEntry.getStatus()))
         .toList();
+    if (filteredList.isEmpty()) {
+      return Optional.empty();
+    }
     var randomEntry = filteredList.get(RANDOM.nextInt(filteredList.size()));
     return Optional.of(randomEntry);
   }
