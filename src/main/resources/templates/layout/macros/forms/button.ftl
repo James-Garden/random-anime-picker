@@ -1,26 +1,26 @@
 <#macro submitButton
   class="submit-button"
-  id="action-button"
+  id="submitButton"
   preventDoubleClick=true
 >
   <script type="text/javascript">
-    const submitButton = {
+    const ${id} = {
         id: "${id}",
         element: null
     };
-    const submitButtonEnabled = ${preventDoubleClick?c};
+    const ${id}Enabled = ${preventDoubleClick?c};
 
-    if (submitButtonEnabled) {
-        window.addEventListener('load', submitButtonSetup)
+    if (${id}Enabled) {
+        window.addEventListener('load', ${id}Setup)
     }
 
-    function submitButtonSetup() {
-        submitButton.element = document.getElementById(submitButton.id);
-        submitButton.element.addEventListener('click', disableButton);
+    function ${id}Setup() {
+        ${id}.element = document.getElementById(${id}.id);
+        ${id}.element.addEventListener('click', disable${id});
     }
 
-    function disableButton() {
-        submitButton.element.disabled = true;
+    function disable${id}() {
+        ${id}.element.disabled = true;
     }
   </script>
 
