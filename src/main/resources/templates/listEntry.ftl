@@ -4,11 +4,12 @@
 
 <#include 'layout/base.ftl'>
 
-<#if listEntry.animeTitleEng?has_content>
-  <#assign pageTitle=listEntry.animeTitleEng>
+<#if listEntry.isPresent()>
+    <#assign pageTitle=listEntry.get().animeTitleEng!listEntry.get().animeTitle>
 <#else>
-  <#assign pageTitle=listEntry.animeTitle!"Unknown Anime">
+    <#assign pageTitle="Not found">
 </#if>
+
 
 <@baseTemplate
   pageTitle=pageTitle
