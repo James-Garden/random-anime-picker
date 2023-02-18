@@ -22,7 +22,7 @@
       <span class="list-update__update-now">
         <@forms.htmlForm actionUrl=updateListUrl>
           <#if isListUpdatable>
-            <@forms.submitButton class="secondary-link" id="refresh-list-link">
+            <@forms.submitButton class="secondary-link" id="refreshListLink">
               Refresh list
             </@forms.submitButton>
           </#if>
