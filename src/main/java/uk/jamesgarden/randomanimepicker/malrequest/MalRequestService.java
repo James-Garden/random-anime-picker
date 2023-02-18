@@ -19,7 +19,7 @@ public class MalRequestService {
   public List<ListEntryDto> getUserList(String username) throws JsonProcessingException {
     var userList = new ArrayList<ListEntryDto>();
     var baseUrl = UrlUtils.getListUrl(username);
-    baseUrl += "/load.json?offset=%d";
+    baseUrl += "/load.json?offset=%d?status=7";
 
     List<ListEntryDto> userListPart;
     do {
