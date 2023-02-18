@@ -66,6 +66,11 @@ div.welcome-wrapper {
     border-style: solid;
 }
 
+.submit-button:disabled {
+    cursor: not-allowed;
+    background-color: grey;
+}
+
 /* List entry */
 
 .list-entry-inner-wrapper {
@@ -133,6 +138,10 @@ td {
 
 :focus.secondary-link {
     color: white;
+}
+
+:disabled.secondary-link {
+    cursor: not-allowed;
 }
 
 /* MyAnimeList link */

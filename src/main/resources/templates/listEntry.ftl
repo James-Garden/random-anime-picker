@@ -21,7 +21,7 @@
       <span class="list-update__update-now">
         <@forms.htmlForm actionUrl=updateListUrl>
           <#if isListUpdatable>
-            <@forms.submitButton class="secondary-link">
+            <@forms.submitButton class="secondary-link" id="refresh-list-link">
               Refresh list
             </@forms.submitButton>
           </#if>
@@ -62,7 +62,7 @@
     </div>
     <div class="new-random-entry-form">
       <@forms.htmlForm method="get">
-        <@forms.submitButton>Go!</@forms.submitButton>
+        <@forms.submitButton jsEnabled=false>Go!</@forms.submitButton>
       </@forms.htmlForm>
     </div>
     <div class="my-anime-list-link">
