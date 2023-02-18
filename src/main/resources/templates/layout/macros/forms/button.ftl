@@ -1,14 +1,14 @@
 <#macro submitButton
   class="submit-button"
   id="action-button"
-  jsEnabled=true
+  preventDoubleClick=true
 >
   <script type="text/javascript">
     const submitButton = {
         id: "${id}",
         element: null
     };
-    const submitButtonEnabled = ${jsEnabled?c};
+    const submitButtonEnabled = ${preventDoubleClick?c};
 
     if (submitButtonEnabled) {
         window.addEventListener('load', submitButtonSetup)
