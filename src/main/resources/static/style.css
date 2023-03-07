@@ -67,7 +67,7 @@ div.welcome-wrapper {
 }
 
 .submit-button:disabled {
-    cursor: not-allowed;
+    cursor: wait;
     background-color: grey;
 }
 
@@ -141,7 +141,7 @@ td {
 }
 
 :disabled.secondary-link {
-    cursor: not-allowed;
+    cursor: wait;
 }
 
 /* MyAnimeList link */
