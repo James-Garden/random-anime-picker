@@ -16,10 +16,11 @@
 
     function ${id}Setup() {
         ${id}.element = document.getElementById(${id}.id);
-        ${id}.element.addEventListener('click', disable${id});
+        addEventListener('submit', event => disable${id}(event));
     }
 
-    function disable${id}() {
+    function disable${id}(event) {
+        event.stopPropagation();
         ${id}.element.disabled = true;
     }
   </script>

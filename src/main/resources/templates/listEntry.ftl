@@ -74,7 +74,7 @@
   </div>
   <div class="new-random-entry-form">
     <@forms.htmlForm method="get">
-      <@forms.submitButton preventDoubleClick=false>Go!</@forms.submitButton>
+      <@forms.submitButton preventDoubleClick=true>Go!</@forms.submitButton>
     </@forms.htmlForm>
   </div>
   <div class="my-anime-list-link">
