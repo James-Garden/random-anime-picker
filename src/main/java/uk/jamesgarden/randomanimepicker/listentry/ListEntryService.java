@@ -20,8 +20,7 @@ public class ListEntryService {
 
   public List<ListEntry> convertDtosToEntities(MalUser user, Collection<MalAnimeListEntryDto> listEntryDtos) {
     return listEntryDtos.stream()
-        .map(ListEntry::from)
-        .peek(listEntry -> listEntry.setUser(user))
+        .map(listEntryDto -> ListEntry.from(listEntryDto, user))
         .toList();
   }
 

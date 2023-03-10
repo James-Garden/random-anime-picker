@@ -23,6 +23,7 @@ import uk.jamesgarden.randomanimepicker.listentry.enums.MediaType;
 import uk.jamesgarden.randomanimepicker.listentry.enums.Source;
 import uk.jamesgarden.randomanimepicker.malrequest.datatransferobjects.MalAnimeListEntryDto;
 import uk.jamesgarden.randomanimepicker.maluser.MalUser;
+import uk.jamesgarden.randomanimepicker.utils.ClassCastUtil;
 
 @SuppressWarnings("unused")
 @Entity
@@ -81,10 +82,11 @@ public class ListEntry {
   private LocalDate userAnimeStartDate;
   private LocalDate userAnimeFinishDate;
 
-  public static ListEntry from(MalAnimeListEntryDto listEntryDto) {
+  public static ListEntry from(MalAnimeListEntryDto listEntryDto, MalUser user) {
     var animeData = listEntryDto.listEntryNodeDto();
     var userEntryData = listEntryDto.listEntryStatusDto();
     var listEntry = new ListEntry();
+    var loggerPrefix = "User: %s, Anime: %d, Field: %s".formatted(user.getUsername(), animeData.id(), "%s");
     listEntry.animeId = animeData.id();
     listEntry.animeTitle = animeData.title();
     listEntry.animeTitleEnglish = animeData.alternativeTitles().en();
@@ -94,41 +96,36 @@ public class ListEntry {
     } else {
       listEntry.animeImage = animeData.mainPicture().get("medium");
     }
-    if (Objects.nonNull(animeData.startDate())) {
-      try {
-        listEntry.animeStartDate = LocalDate.parse(animeData.startDate());
-      } catch (Exception e) {
-        LOGGER.error("Could not cast %s to LocalDate".formatted(animeData.startDate()), e.getCause());
-      }
-
-    }
-    if (Objects.nonNull(animeData.endDate())) {
-      try {
-        listEntry.animeEndDate = LocalDate.parse(animeData.endDate());
-      } catch (Exception e) {
-        LOGGER.error("Could not cast %s to LocalDate".formatted(animeData.endDate()), e.getCause());
-      }
-    }
+    listEntry.animeStartDate = ClassCastUtil.castOrNull(
+        () -> LocalDate.parse(animeData.startDate()),
+        animeData.startDate(),
+        LocalDate.class,
+        loggerPrefix.formatted("animeStartDate")
+    );
+    listEntry.animeEndDate = ClassCastUtil.castOrNull(
+        () -> LocalDate.parse(animeData.endDate()),
+        animeData.endDate(),
+        LocalDate.class,
+        loggerPrefix.formatted("animeEndDate")
+    );
     listEntry.animeSynopsis = animeData.synopsis();
     listEntry.animeAverageScore = animeData.averageScore();
     listEntry.animeRankByScore = animeData.rankByScore();
     listEntry.animeRankByPopularity = animeData.rankByPopularity();
     listEntry.animeNumberOfUsers = animeData.numberOfUsers();
     listEntry.animeNumberOfScoringUsers = animeData.numberOfScoringUsers();
-    if (Objects.nonNull(animeData.createdAtDateTime())) {
-      try {
-        listEntry.animeCreatedAtDateTime = ZonedDateTime.parse(animeData.createdAtDateTime(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
-      } catch (Exception e) {
-        LOGGER.error("Could not cast %s to ZonedDateTime".formatted(animeData.createdAtDateTime()), e.getCause());
-      }
-    }
-    if (Objects.nonNull(animeData.updatedAtDateTime())) {
-      try {
-        listEntry.animeUpdatedAtDateTime = ZonedDateTime.parse(animeData.updatedAtDateTime(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
-      } catch (Exception e) {
-        LOGGER.error("Could not cast %s to ZonedDateTime".formatted(animeData.updatedAtDateTime()), e.getCause());
-      }
-    }
+    listEntry.animeCreatedAtDateTime = ClassCastUtil.castOrNull(
+        () -> ZonedDateTime.parse(animeData.createdAtDateTime(), DateTimeFormatter.ISO_OFFSET_DATE_TIME),
+        animeData.createdAtDateTime(),
+        ZonedDateTime.class,
+        loggerPrefix.formatted("animeCreatedAtDateTime")
+    );
+    listEntry.animeUpdatedAtDateTime = ClassCastUtil.castOrNull(
+        () -> ZonedDateTime.parse(animeData.updatedAtDateTime(), DateTimeFormatter.ISO_OFFSET_DATE_TIME),
+        animeData.updatedAtDateTime(),
+        ZonedDateTime.class,
+        loggerPrefix.formatted("animeUpdatedAtDateTime")
+    );
     listEntry.mediaType = MediaType.parse(animeData.mediaType());
     listEntry.airingStatus = AiringStatus.parse(animeData.status());
     listEntry.animeNumEpisodes = animeData.numEpisodes();
@@ -140,27 +137,24 @@ public class ListEntry {
     listEntry.userAnimeScore = userEntryData.score();
     listEntry.userAnimeNumEpisodesWatched = userEntryData.numEpisodesWatched();
     listEntry.userAnimeIsRewatching = userEntryData.isRewatching();
-    if (Objects.nonNull(animeData.updatedAtDateTime())) {
-      try {
-        listEntry.userAnimeUpdatedAtDateTime = ZonedDateTime.parse(userEntryData.updatedAtDateTime(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
-      } catch (Exception e) {
-        LOGGER.error("Could not cast %s to ZonedDateTime".formatted(userEntryData.updatedAtDateTime()), e.getCause());
-      }
-    }
-    if (Objects.nonNull(userEntryData.startDate())) {
-      try {
-        listEntry.userAnimeStartDate = LocalDate.parse(userEntryData.startDate());
-      } catch (Exception e) {
-        LOGGER.error("Could not cast %s to LocalDate".formatted(userEntryData.startDate()), e.getCause());
-      }
-    }
-    if (Objects.nonNull(userEntryData.finishDate())) {
-      try {
-        listEntry.userAnimeFinishDate = LocalDate.parse(userEntryData.finishDate());
-      } catch (Exception e) {
-        LOGGER.error("Could not cast %s to LocalDate".formatted(userEntryData.finishDate()), e.getCause());
-      }
-    }
+    listEntry.userAnimeUpdatedAtDateTime = ClassCastUtil.castOrNull(
+        () -> ZonedDateTime.parse(userEntryData.updatedAtDateTime(), DateTimeFormatter.ISO_OFFSET_DATE_TIME),
+        userEntryData.updatedAtDateTime(),
+        ZonedDateTime.class,
+        loggerPrefix.formatted("userAnimeUpdatedAtDateTime")
+    );
+    listEntry.userAnimeStartDate = ClassCastUtil.castOrNull(
+        () -> LocalDate.parse(userEntryData.startDate()),
+        userEntryData.startDate(),
+        LocalDate.class,
+        loggerPrefix.formatted("userAnimeStartDate"));
+    listEntry.userAnimeFinishDate = ClassCastUtil.castOrNull(
+        () -> LocalDate.parse(userEntryData.finishDate()),
+        userEntryData.finishDate(),
+        LocalDate.class,
+        loggerPrefix.formatted("userAnimeFinishDate")
+    );
+    listEntry.user = user;
 
     return listEntry;
   }

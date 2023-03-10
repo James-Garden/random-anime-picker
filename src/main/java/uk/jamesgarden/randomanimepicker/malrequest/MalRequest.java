@@ -118,14 +118,14 @@ public class MalRequest {
       Objects.requireNonNull(path);
       Objects.requireNonNull(clientId);
 
-      var fields = String.join(",", this.fields);
+      var fieldsParam = String.join(",", this.fields);
       var uri = new DefaultUriBuilderFactory().builder()
           .scheme(HTTPS_SCHEME)
           .host(API_HOSTNAME)
           .path(path)
           .queryParamIfPresent("limit", Optional.ofNullable(limit))
           .queryParamIfPresent("nsfw", Optional.ofNullable(nsfw))
-          .queryParam("fields", fields)
+          .queryParam("fieldsParam", fieldsParam)
           .build();
 
       return MalRequest.from(uri, clientId);
