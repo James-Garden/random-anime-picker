@@ -8,10 +8,8 @@
 name: Java CI with Gradle
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  - push
+  - pull_request
 
 permissions:
   contents: read
@@ -28,6 +26,8 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+    - name: Own gradlew 
+      run: chmod +x ./gradlew
     - name: Build with Gradle
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
