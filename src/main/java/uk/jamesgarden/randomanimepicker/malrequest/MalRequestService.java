@@ -26,7 +26,8 @@ public class MalRequestService {
 
   public List<MalAnimeListEntryDto> getUserList(String username) throws IOException, InterruptedException {
     var initialRequest = MalRequest.newBuilder()
-        .animelist(username)
+        .withHost(malApiConfiguration.getHostname())
+        .withPath(malApiConfiguration.getBasePath(), malApiConfiguration.getAnimelistPath(), username)
         .withClientId(malApiConfiguration.getClientId())
         .withDefaultFields()
         .withNsfw(true)

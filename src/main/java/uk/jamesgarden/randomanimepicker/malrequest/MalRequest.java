@@ -17,10 +17,7 @@ public class MalRequest {
 
 
   private static final String HTTPS_SCHEME = "https";
-  private static final String API_HOSTNAME = "api.myanimelist.net";
-  private static final String API_BASE_PATH = "/v2/";
   private static final String API_CLIENT_ID_HEADER_NAME = "X-MAL-CLIENT-ID";
-  private static final String USER_LIST_REQUEST_PATH = "users/%s/animelist";
   private static final List<String> DEFAULT_FIELDS = List.of(
       "list_status",
       "id",
@@ -84,13 +81,19 @@ public class MalRequest {
   public static class MalRequestBuilder {
 
     private String clientId;
+    private String host;
     private String path;
     private Integer limit;
     private Boolean nsfw;
     private final List<String> fields = new ArrayList<>();
 
-    public MalRequestBuilder animelist(String username) {
-      this.path = API_BASE_PATH + USER_LIST_REQUEST_PATH.formatted(username);
+    public MalRequestBuilder withHost(String host) {
+      this.host = host;
+      return this;
+    }
+
+    public MalRequestBuilder withPath(String basePath, String relativePath, String username) {
+      this.path = basePath + relativePath.formatted(username);
       return this;
     }
 
@@ -118,14 +121,14 @@ public class MalRequest {
       Objects.requireNonNull(path);
       Objects.requireNonNull(clientId);
 
-      var fields = String.join(",", this.fields);
+      var fieldsParam = String.join(",", this.fields);
       var uri = new DefaultUriBuilderFactory().builder()
           .scheme(HTTPS_SCHEME)
-          .host(API_HOSTNAME)
+          .host(host)
           .path(path)
           .queryParamIfPresent("limit", Optional.ofNullable(limit))
           .queryParamIfPresent("nsfw", Optional.ofNullable(nsfw))
-          .queryParam("fields", fields)
+          .queryParam("fields", fieldsParam)
           .build();
 
       return MalRequest.from(uri, clientId);

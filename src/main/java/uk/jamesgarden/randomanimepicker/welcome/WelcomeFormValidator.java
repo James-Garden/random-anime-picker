@@ -41,9 +41,9 @@ public class WelcomeFormValidator implements Validator {
         "Enter a username"
     );
 
-    if (!errors.hasFieldErrors(USERNAME_FIELD)) {
+    if (!errors.hasFieldErrors(USERNAME_FIELD)
+        && (!(malUserService.existsByUsername(form.getUsername()) || validateUsernameExistsExternally(form.getUsername())))) {
       // Using short-circuited OR to avoid unnecessary request if we know that an entered username exists
-      if (!(malUserService.existsByUsername(form.getUsername()) || validateUsernameExistsExternally(form.getUsername())))
         errors.rejectValue(
             USERNAME_FIELD,
             "%s.invalid".formatted(USERNAME_FIELD),
@@ -62,6 +62,9 @@ public class WelcomeFormValidator implements Validator {
       var response = client.send(request, HttpResponse.BodyHandlers.ofString());
       return HttpStatus.NOT_FOUND.value() != (response.statusCode());
     } catch (Exception e) {
+      if (InterruptedException.class.equals(e.getClass())) {
+        Thread.currentThread().interrupt();
+      }
       return false;
     }
   }

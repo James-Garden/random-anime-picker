@@ -59,6 +59,9 @@ public class ListUpdateService {
     } catch (IOException | InterruptedException e) {
       var error = "Could not process list for MalUser with ID [%s]".formatted(malUser.getId().toString());
       LOGGER.error(error);
+      if (InterruptedException.class.equals(e.getClass())) {
+        Thread.currentThread().interrupt();
+      }
       throw new InternalServerErrorException(error);
     }
   }
