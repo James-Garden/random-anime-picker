@@ -5,9 +5,7 @@
 <#include 'layout/base.ftl'>
 
 <#if listEntry.isPresent()>
-    <#assign pageTitle=listEntry.get().animeTitleEng!listEntry.get().animeTitle>
-<#else>
-    <#assign pageTitle="Not found">
+    <#assign pageTitle=listEntry.get().animeTitleEnglish!listEntry.get().animeTitle>
 </#if>
 
 
@@ -15,6 +13,9 @@
   pageTitle=pageTitle
 >
   <div class="list-entry">
+    <div class="back-link">
+      <span class="secondary-text">&lt; </span><a href="/" class="secondary-link">Back</a>
+    </div>
     <div class="list-update">
       <span class="list-update__last-updated">
         Last updated ${lastUpdated}
@@ -44,31 +45,33 @@
   <div class="list-entry-inner-wrapper">
     <div class="anime-image">
       <@image.image
-        imageUrl=listEntry.animeImagePath
+        imageUrl=listEntry.animeImage
         altText=listEntry.animeTitle!"Unknown"
         class="anime-image"
       />
     </div>
     <div class="anime-info">
-      <#if listEntry.animeTitleEng?has_content>
+      <#if listEntry.animeTitleEnglish?has_content>
         <div class="anime-title">
-          <h1>${listEntry.animeTitleEng}</h1>
+          <h1>${listEntry.animeTitleEnglish}</h1>
         </div>
-        <div class="anime-title-jp">
-          <h2>${listEntry.animeTitle}</h2>
-        </div>
+        <#if listEntry.animeTitleJapanese?has_content && (listEntry.animeTitleJapanese != listEntry.animeTitleEnglish)>
+          <div class="anime-title-jp">
+            <h2>${listEntry.animeTitleJapanese}</h2>
+          </div>
+        </#if>
       <#else>
-        <div class="anime-title-jp">
+        <div class="anime-title">
           <h1>${listEntry.animeTitle}</h1>
         </div>
       </#if>
       <@table.table class="anime-details">
-        <@table.simpleRow keyText="Status" valueText=listEntry.status.displayName />
-        <@table.simpleRow keyText="Score" valueText=listEntry.animeScoreVal />
-        <@table.simpleRow keyText="Number of Episodes" valueText=listEntry.animeNumEpisodes />
+        <@table.simpleRow keyText="Status" valueText=listEntry.listEntryStatus.displayName />
+        <@table.simpleRow keyText="Score" valueText=listEntry.animeAverageScore!"" />
+        <@table.simpleRow keyText="Number of Episodes" valueText=listEntry.animeNumEpisodes!"" />
         <@table.simpleRow keyText="Date Added to List" valueText=addedToList!"" />
-        <@table.simpleRow keyText="Airing Status" valueText=listEntry.animeAiringStatus.displayName />
-        <@table.simpleRow keyText="Age Rating" valueText=listEntry.animeMpaaRatingString!"" />
+        <@table.simpleRow keyText="Airing Status" valueText=listEntry.airingStatus.displayName />
+        <@table.simpleRow keyText="Age Rating" valueText=listEntry.ageRating.displayName />
       </@table.table>
     </div>
   </div>
@@ -77,7 +80,9 @@
       <@forms.submitButton preventDoubleClick=true>Go!</@forms.submitButton>
     </@forms.htmlForm>
   </div>
-  <div class="my-anime-list-link">
-    <a href="https://myanimelist.net${listEntry.animeUrl}" class="secondary-link">View on MyAnimeList</a>
-  </div>
+  <#if listEntry.animeId?has_content>
+    <div class="my-anime-list-link">
+      <a href="https://myanimelist.net/anime/${listEntry.animeId}" class="secondary-link">View on MyAnimeList</a>
+    </div>
+  </#if>
 </#macro>
