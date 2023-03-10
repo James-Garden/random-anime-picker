@@ -1,7 +1,9 @@
 package uk.jamesgarden.randomanimepicker.malrequest.datatransferobjects;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record ListEntryStatusDto(
     @JsonProperty("status") String status,
     @JsonProperty("score") Integer score,
