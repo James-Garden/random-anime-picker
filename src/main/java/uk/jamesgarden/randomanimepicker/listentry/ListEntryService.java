@@ -3,11 +3,9 @@ package uk.jamesgarden.randomanimepicker.listentry;
 import jakarta.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.jamesgarden.randomanimepicker.malrequest.ListEntryDto;
+import uk.jamesgarden.randomanimepicker.malrequest.datatransferobjects.MalAnimeListEntryDto;
 import uk.jamesgarden.randomanimepicker.maluser.MalUser;
 
 @Service
@@ -20,7 +18,7 @@ public class ListEntryService {
     this.listEntryRepository = listEntryRepository;
   }
 
-  public List<ListEntry> convertDtosToEntities(MalUser user, Collection<ListEntryDto> listEntryDtos) {
+  public List<ListEntry> convertDtosToEntities(MalUser user, Collection<MalAnimeListEntryDto> listEntryDtos) {
     return listEntryDtos.stream()
         .map(ListEntry::from)
         .peek(listEntry -> listEntry.setUser(user))
@@ -29,10 +27,6 @@ public class ListEntryService {
 
   public List<ListEntry> getUserListEntries(MalUser user) {
     return listEntryRepository.findAllByUser(user);
-  }
-
-  public Optional<ListEntry> findListEntryById(UUID id) {
-    return listEntryRepository.findById(id);
   }
 
   @Transactional

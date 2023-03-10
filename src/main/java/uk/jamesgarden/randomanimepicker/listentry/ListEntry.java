@@ -8,16 +8,28 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
-import uk.jamesgarden.randomanimepicker.malrequest.ListEntryDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uk.jamesgarden.randomanimepicker.listentry.enums.AgeRating;
+import uk.jamesgarden.randomanimepicker.listentry.enums.AiringStatus;
+import uk.jamesgarden.randomanimepicker.listentry.enums.ListEntryStatus;
+import uk.jamesgarden.randomanimepicker.listentry.enums.MediaType;
+import uk.jamesgarden.randomanimepicker.listentry.enums.Source;
+import uk.jamesgarden.randomanimepicker.malrequest.datatransferobjects.MalAnimeListEntryDto;
 import uk.jamesgarden.randomanimepicker.maluser.MalUser;
-import uk.jamesgarden.randomanimepicker.utils.TimestampUtils;
 
 @SuppressWarnings("unused")
 @Entity
 @Table(name = "user_list_entries")
 public class ListEntry {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ListEntry.class);
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -27,50 +39,152 @@ public class ListEntry {
   @JoinColumn(name = "mal_user_id")
   private MalUser user;
 
-  @Enumerated
-  private ListEntryStatus status;
-  private Integer score;
-  private String tags;
-  private Integer isRewatching;
-  private Integer numWatchedEpisodes;
-  private Instant createdAt;
-  private Instant updatedAt;
-  private String animeTitle;
-  private String animeTitleEng;
-  private Integer animeNumEpisodes;
-
-  @Enumerated
-  private AnimeAiringStatus animeAiringStatus;
-
   private Integer animeId;
-  private Integer animeTotalMembers;
-  private Integer animeTotalScores;
-  private Double animeScoreVal;
-  private Boolean hasEpisodeVideo;
-  private Boolean hasPromotionVideo;
-  private Boolean hasVideo;
-  private String videoUrl;
-  private String titleLocalized;
-  private String animeUrl;
-  private String animeImagePath;
-  private Boolean isAddedToList;
-  private String animeMediaTypeString;
-  private String animeMpaaRatingString;
-  private String startDateString;
-  private String finishDateString;
-  private String animeStartDateString;
-  private String animeEndDateString;
-  private String daysString;
-  private String storageString;
-  private String priorityRating;
-  private String notes;
-  private String editableNotes;
+  private String animeTitle;
+  private String animeTitleEnglish;
+  private String animeTitleJapanese;
+  private String animeImage;
+  private LocalDate animeStartDate;
+  private LocalDate animeEndDate;
+  private String animeSynopsis;
+  private Double animeAverageScore;
+  private Integer animeRankByScore;
+  private Integer animeRankByPopularity;
+  private Integer animeNumberOfUsers;
+  private Integer animeNumberOfScoringUsers;
+  private ZonedDateTime animeCreatedAtDateTime;
+  private ZonedDateTime animeUpdatedAtDateTime;
 
-  public ListEntry() {
+  @Enumerated
+  private MediaType mediaType;
+
+  @Enumerated
+  private AiringStatus airingStatus;
+
+  private String animeGenres;
+  private Integer animeNumEpisodes;
+  private Source animeSource;
+  private Integer animeEpisodeDurationSeconds;
+
+  @Enumerated
+  private AgeRating ageRating;
+
+  private String animeSeason;
+
+  @Enumerated
+  private ListEntryStatus listEntryStatus;
+
+  private Integer userAnimeScore;
+  private Integer userAnimeNumEpisodesWatched;
+  private Boolean userAnimeIsRewatching;
+  private ZonedDateTime userAnimeUpdatedAtDateTime;
+  private LocalDate userAnimeStartDate;
+  private LocalDate userAnimeFinishDate;
+
+  public static ListEntry from(MalAnimeListEntryDto listEntryDto) {
+    var animeData = listEntryDto.listEntryNodeDto();
+    var userEntryData = listEntryDto.listEntryStatusDto();
+    var listEntry = new ListEntry();
+    listEntry.animeId = animeData.id();
+    listEntry.animeTitle = animeData.title();
+    listEntry.animeTitleEnglish = animeData.alternativeTitles().en();
+    listEntry.animeTitleJapanese = animeData.alternativeTitles().ja();
+    if (Objects.nonNull(animeData.mainPicture().get("large"))) {
+      listEntry.animeImage = animeData.mainPicture().get("large");
+    } else {
+      listEntry.animeImage = animeData.mainPicture().get("medium");
+    }
+    if (Objects.nonNull(animeData.startDate())) {
+      try {
+        listEntry.animeStartDate = LocalDate.parse(animeData.startDate());
+      } catch (Exception e) {
+        LOGGER.error("Could not cast %s to LocalDate".formatted(animeData.startDate()), e.getCause());
+      }
+
+    }
+    if (Objects.nonNull(animeData.endDate())) {
+      try {
+        listEntry.animeEndDate = LocalDate.parse(animeData.endDate());
+      } catch (Exception e) {
+        LOGGER.error("Could not cast %s to LocalDate".formatted(animeData.endDate()), e.getCause());
+      }
+    }
+    listEntry.animeSynopsis = animeData.synopsis();
+    listEntry.animeAverageScore = animeData.averageScore();
+    listEntry.animeRankByScore = animeData.rankByScore();
+    listEntry.animeRankByPopularity = animeData.rankByPopularity();
+    listEntry.animeNumberOfUsers = animeData.numberOfUsers();
+    listEntry.animeNumberOfScoringUsers = animeData.numberOfScoringUsers();
+    if (Objects.nonNull(animeData.createdAtDateTime())) {
+      try {
+        listEntry.animeCreatedAtDateTime = ZonedDateTime.parse(animeData.createdAtDateTime(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+      } catch (Exception e) {
+        LOGGER.error("Could not cast %s to ZonedDateTime".formatted(animeData.createdAtDateTime()), e.getCause());
+      }
+    }
+    if (Objects.nonNull(animeData.updatedAtDateTime())) {
+      try {
+        listEntry.animeUpdatedAtDateTime = ZonedDateTime.parse(animeData.updatedAtDateTime(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+      } catch (Exception e) {
+        LOGGER.error("Could not cast %s to ZonedDateTime".formatted(animeData.updatedAtDateTime()), e.getCause());
+      }
+    }
+    listEntry.mediaType = MediaType.parse(animeData.mediaType());
+    listEntry.airingStatus = AiringStatus.parse(animeData.status());
+    listEntry.animeNumEpisodes = animeData.numEpisodes();
+    listEntry.animeSource = Source.parse(animeData.source());
+    listEntry.animeEpisodeDurationSeconds = animeData.episodeDurationSeconds();
+    listEntry.ageRating = AgeRating.parse(animeData.rating());
+    listEntry.animeSeason = formatSeason(animeData.startSeason());
+    listEntry.listEntryStatus = ListEntryStatus.parse(userEntryData.status());
+    listEntry.userAnimeScore = userEntryData.score();
+    listEntry.userAnimeNumEpisodesWatched = userEntryData.numEpisodesWatched();
+    listEntry.userAnimeIsRewatching = userEntryData.isRewatching();
+    if (Objects.nonNull(animeData.updatedAtDateTime())) {
+      try {
+        listEntry.userAnimeUpdatedAtDateTime = ZonedDateTime.parse(userEntryData.updatedAtDateTime(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+      } catch (Exception e) {
+        LOGGER.error("Could not cast %s to ZonedDateTime".formatted(userEntryData.updatedAtDateTime()), e.getCause());
+      }
+    }
+    if (Objects.nonNull(userEntryData.startDate())) {
+      try {
+        listEntry.userAnimeStartDate = LocalDate.parse(userEntryData.startDate());
+      } catch (Exception e) {
+        LOGGER.error("Could not cast %s to LocalDate".formatted(userEntryData.startDate()), e.getCause());
+      }
+    }
+    if (Objects.nonNull(userEntryData.finishDate())) {
+      try {
+        listEntry.userAnimeFinishDate = LocalDate.parse(userEntryData.finishDate());
+      } catch (Exception e) {
+        LOGGER.error("Could not cast %s to LocalDate".formatted(userEntryData.finishDate()), e.getCause());
+      }
+    }
+
+    return listEntry;
   }
 
-  public UUID getId() {
-    return id;
+  private static String formatSeason(Map<String, String> seasonMap) {
+    if (Objects.isNull(seasonMap)) {
+      return null;
+    }
+    var year = seasonMap.get("year");
+    var season = seasonMap.get("season");
+    if (Objects.isNull(year) || Objects.isNull(season)) {
+      return null;
+    }
+    var formattedSeason = switch (season) {
+      case "spring" -> "Spring";
+      case "summer" -> "Summer";
+      case "fall" -> "Autumn";
+      case "winter" -> "Winter";
+      default -> "";
+    };
+    if (formattedSeason.isBlank()) {
+      return null;
+    }
+    return "%s %s".formatted(formattedSeason, year);
   }
 
   public MalUser getUser() {
@@ -81,104 +195,12 @@ public class ListEntry {
     this.user = user;
   }
 
-  public static ListEntry from(ListEntryDto listEntryDto) {
-    var listEntry = new ListEntry();
-    listEntry.setStatus(ListEntryStatus.from(listEntryDto.status()));
-    listEntry.setScore(listEntryDto.score());
-    listEntry.setTags(listEntryDto.tags());
-    listEntry.setIsRewatching(listEntryDto.isRewatching());
-    listEntry.setNumWatchedEpisodes(listEntryDto.numWatchedEpisodes());
-    listEntry.setCreatedAt(TimestampUtils.instantFromEpochSecond(listEntryDto.createdAt()));
-    listEntry.setUpdatedAt(TimestampUtils.instantFromEpochSecond(listEntryDto.updatedAt()));
-    listEntry.setAnimeTitle(listEntryDto.animeTitle());
-    listEntry.setAnimeTitleEng(listEntryDto.animeTitleEng());
-    listEntry.setAnimeNumEpisodes(listEntryDto.animeNumEpisodes());
-    listEntry.setAnimeAiringStatus(AnimeAiringStatus.from(listEntryDto.animeAiringStatus()));
-    listEntry.setAnimeId(listEntryDto.animeId());
-    listEntry.setAnimeTotalMembers(listEntryDto.animeTotalMembers());
-    listEntry.setAnimeTotalScores(listEntryDto.animeTotalScores());
-    listEntry.setAnimeScoreVal(listEntryDto.animeScoreVal());
-    listEntry.setHasEpisodeVideo(listEntryDto.hasEpisodeVideo());
-    listEntry.setHasPromotionVideo(listEntryDto.hasPromotionVideo());
-    listEntry.setHasVideo(listEntryDto.hasVideo());
-    listEntry.setVideoUrl(listEntryDto.videoUrl());
-    listEntry.setTitleLocalized(listEntryDto.titleLocalized());
-    listEntry.setAnimeUrl(listEntryDto.animeUrl());
-    {
-      var largeAnimeImage = listEntryDto.animeImagePath()
-          .replace("/r/192x272", "")
-          .replaceFirst("/images/anime/\\d+/\\d+", "$0l");
-      listEntry.setAnimeImagePath(largeAnimeImage);
-    }
-    listEntry.setAddedToList(listEntryDto.isAddedToList());
-    listEntry.setAnimeMediaTypeString(listEntryDto.animeMediaTypeString());
-    listEntry.setAnimeMpaaRatingString(listEntryDto.animeMpaaRatingString());
-    listEntry.setStartDateString(listEntryDto.startDateString());
-    listEntry.setFinishDateString(listEntryDto.finishDateString());
-    listEntry.setAnimeStartDateString(listEntryDto.animeStartDateString());
-    listEntry.setAnimeEndDateString(listEntryDto.animeEndDateString());
-    listEntry.setDaysString(listEntryDto.daysString());
-    listEntry.setStorageString(listEntryDto.storageString());
-    listEntry.setPriorityRating(listEntryDto.priorityRating());
-    listEntry.setNotes(listEntryDto.notes());
-    listEntry.setEditableNotes(listEntryDto.editableNotes());
-    return listEntry;
+  public Integer getAnimeId() {
+    return animeId;
   }
 
-  public ListEntryStatus getStatus() {
-    return status;
-  }
-
-  public void setStatus(ListEntryStatus status) {
-    this.status = status;
-  }
-
-  public Integer getScore() {
-    return score;
-  }
-
-  public void setScore(Integer score) {
-    this.score = score;
-  }
-
-  public String getTags() {
-    return tags;
-  }
-
-  public void setTags(String tags) {
-    this.tags = tags;
-  }
-
-  public Integer getIsRewatching() {
-    return isRewatching;
-  }
-
-  public void setIsRewatching(Integer isRewatching) {
-    this.isRewatching = isRewatching;
-  }
-
-  public Integer getNumWatchedEpisodes() {
-    return numWatchedEpisodes;
-  }
-
-  public void setNumWatchedEpisodes(Integer numWatchedEpisodes) {
-    this.numWatchedEpisodes = numWatchedEpisodes;
-  }
-
-  public Instant getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(Instant createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public Instant getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(Instant updatedAt) {
-    this.updatedAt = updatedAt;
+  public void setAnimeId(Integer animeId) {
+    this.animeId = animeId;
   }
 
   public String getAnimeTitle() {
@@ -189,12 +211,132 @@ public class ListEntry {
     this.animeTitle = animeTitle;
   }
 
-  public String getAnimeTitleEng() {
-    return animeTitleEng;
+  public String getAnimeTitleEnglish() {
+    return animeTitleEnglish;
   }
 
-  public void setAnimeTitleEng(String animeTitleEng) {
-    this.animeTitleEng = animeTitleEng;
+  public void setAnimeTitleEnglish(String animeTitleEnglish) {
+    this.animeTitleEnglish = animeTitleEnglish;
+  }
+
+  public String getAnimeTitleJapanese() {
+    return animeTitleJapanese;
+  }
+
+  public void setAnimeTitleJapanese(String animeTitleJapanese) {
+    this.animeTitleJapanese = animeTitleJapanese;
+  }
+
+  public String getAnimeImage() {
+    return animeImage;
+  }
+
+  public void setAnimeImage(String animeImage) {
+    this.animeImage = animeImage;
+  }
+
+  public LocalDate getAnimeStartDate() {
+    return animeStartDate;
+  }
+
+  public void setAnimeStartDate(LocalDate animeStartDate) {
+    this.animeStartDate = animeStartDate;
+  }
+
+  public LocalDate getAnimeEndDate() {
+    return animeEndDate;
+  }
+
+  public void setAnimeEndDate(LocalDate animeEndDate) {
+    this.animeEndDate = animeEndDate;
+  }
+
+  public String getAnimeSynopsis() {
+    return animeSynopsis;
+  }
+
+  public void setAnimeSynopsis(String animeSynopsis) {
+    this.animeSynopsis = animeSynopsis;
+  }
+
+  public Double getAnimeAverageScore() {
+    return animeAverageScore;
+  }
+
+  public void setAnimeAverageScore(Double animeAverageScore) {
+    this.animeAverageScore = animeAverageScore;
+  }
+
+  public Integer getAnimeRankByScore() {
+    return animeRankByScore;
+  }
+
+  public void setAnimeRankByScore(Integer animeRankByScore) {
+    this.animeRankByScore = animeRankByScore;
+  }
+
+  public Integer getAnimeRankByPopularity() {
+    return animeRankByPopularity;
+  }
+
+  public void setAnimeRankByPopularity(Integer animeRankByPopularity) {
+    this.animeRankByPopularity = animeRankByPopularity;
+  }
+
+  public Integer getAnimeNumberOfUsers() {
+    return animeNumberOfUsers;
+  }
+
+  public void setAnimeNumberOfUsers(Integer animeNumberOfUsers) {
+    this.animeNumberOfUsers = animeNumberOfUsers;
+  }
+
+  public Integer getAnimeNumberOfScoringUsers() {
+    return animeNumberOfScoringUsers;
+  }
+
+  public void setAnimeNumberOfScoringUsers(Integer animeNumberOfScoringUsers) {
+    this.animeNumberOfScoringUsers = animeNumberOfScoringUsers;
+  }
+
+  public ZonedDateTime getAnimeCreatedAtDateTime() {
+    return animeCreatedAtDateTime;
+  }
+
+  public void setAnimeCreatedAtDateTime(ZonedDateTime animeCreatedAtDateTime) {
+    this.animeCreatedAtDateTime = animeCreatedAtDateTime;
+  }
+
+  public ZonedDateTime getAnimeUpdatedAtDateTime() {
+    return animeUpdatedAtDateTime;
+  }
+
+  public void setAnimeUpdatedAtDateTime(ZonedDateTime animeUpdatedAtDateTime) {
+    this.animeUpdatedAtDateTime = animeUpdatedAtDateTime;
+  }
+
+  public MediaType getMediaType() {
+    return mediaType;
+  }
+
+  public void setMediaType(MediaType mediaType) {
+    this.mediaType = mediaType;
+  }
+
+  public AiringStatus getAiringStatus() {
+    return airingStatus;
+  }
+
+  public void setAiringStatus(AiringStatus airingStatus) {
+    this.airingStatus = airingStatus;
+  }
+
+  public String getAnimeGenres() {
+    return animeGenres;
+  }
+
+  public void setAnimeGenres(String animeGenres) {
+    this.animeGenres = animeGenres;
   }
 
   public Integer getAnimeNumEpisodes() {
@@ -205,195 +347,91 @@ public class ListEntry {
     this.animeNumEpisodes = animeNumEpisodes;
   }
 
-  public AnimeAiringStatus getAnimeAiringStatus() {
-    return animeAiringStatus;
+  public Source getAnimeSource() {
+    return animeSource;
   }
 
-  public void setAnimeAiringStatus(AnimeAiringStatus animeAiringStatus) {
-    this.animeAiringStatus = animeAiringStatus;
+  public void setAnimeSource(Source animeSource) {
+    this.animeSource = animeSource;
   }
 
-  public Integer getAnimeId() {
-    return animeId;
+  public Integer getAnimeEpisodeDurationSeconds() {
+    return animeEpisodeDurationSeconds;
   }
 
-  public void setAnimeId(Integer animeId) {
-    this.animeId = animeId;
+  public void setAnimeEpisodeDurationSeconds(Integer animeEpisodeDurationSeconds) {
+    this.animeEpisodeDurationSeconds = animeEpisodeDurationSeconds;
   }
 
-  public Integer getAnimeTotalMembers() {
-    return animeTotalMembers;
+  public AgeRating getAgeRating() {
+    return ageRating;
   }
 
-  public void setAnimeTotalMembers(Integer animeTotalMembers) {
-    this.animeTotalMembers = animeTotalMembers;
+  public void setAgeRating(AgeRating ageRating) {
+    this.ageRating = ageRating;
   }
 
-  public Integer getAnimeTotalScores() {
-    return animeTotalScores;
+  public String getAnimeSeason() {
+    return animeSeason;
   }
 
-  public void setAnimeTotalScores(Integer animeTotalScores) {
-    this.animeTotalScores = animeTotalScores;
+  public void setAnimeSeason(String animeSeason) {
+    this.animeSeason = animeSeason;
   }
 
-  public Double getAnimeScoreVal() {
-    return animeScoreVal;
+  public ListEntryStatus getListEntryStatus() {
+    return listEntryStatus;
   }
 
-  public void setAnimeScoreVal(Double animeScoreVal) {
-    this.animeScoreVal = animeScoreVal;
+  public void setListEntryStatus(ListEntryStatus listEntryStatus) {
+    this.listEntryStatus = listEntryStatus;
   }
 
-  public Boolean getHasEpisodeVideo() {
-    return hasEpisodeVideo;
+  public Integer getUserAnimeScore() {
+    return userAnimeScore;
   }
 
-  public void setHasEpisodeVideo(Boolean hasEpisodeVideo) {
-    this.hasEpisodeVideo = hasEpisodeVideo;
+  public void setUserAnimeScore(Integer userAnimeScore) {
+    this.userAnimeScore = userAnimeScore;
   }
 
-  public Boolean getHasPromotionVideo() {
-    return hasPromotionVideo;
+  public Integer getUserAnimeNumEpisodesWatched() {
+    return userAnimeNumEpisodesWatched;
   }
 
-  public void setHasPromotionVideo(Boolean hasPromotionVideo) {
-    this.hasPromotionVideo = hasPromotionVideo;
+  public void setUserAnimeNumEpisodesWatched(Integer userAnimeNumEpisodesWatched) {
+    this.userAnimeNumEpisodesWatched = userAnimeNumEpisodesWatched;
   }
 
-  public Boolean getHasVideo() {
-    return hasVideo;
+  public Boolean getUserAnimeIsRewatching() {
+    return userAnimeIsRewatching;
   }
 
-  public void setHasVideo(Boolean hasVideo) {
-    this.hasVideo = hasVideo;
+  public void setUserAnimeIsRewatching(Boolean userAnimeIsRewatching) {
+    this.userAnimeIsRewatching = userAnimeIsRewatching;
   }
 
-  public String getVideoUrl() {
-    return videoUrl;
+  public ZonedDateTime getUserAnimeUpdatedAtDateTime() {
+    return userAnimeUpdatedAtDateTime;
   }
 
-  public void setVideoUrl(String videoUrl) {
-    this.videoUrl = videoUrl;
+  public void setUserAnimeUpdatedAtDateTime(ZonedDateTime userAnimeUpdatedAtDateTime) {
+    this.userAnimeUpdatedAtDateTime = userAnimeUpdatedAtDateTime;
   }
 
-  public String getTitleLocalized() {
-    return titleLocalized;
+  public LocalDate getUserAnimeStartDate() {
+    return userAnimeStartDate;
   }
 
-  public void setTitleLocalized(String titleLocalized) {
-    this.titleLocalized = titleLocalized;
+  public void setUserAnimeStartDate(LocalDate userAnimeStartDate) {
+    this.userAnimeStartDate = userAnimeStartDate;
   }
 
-  public String getAnimeUrl() {
-    return animeUrl;
+  public LocalDate getUserAnimeFinishDate() {
+    return userAnimeFinishDate;
   }
 
-  public void setAnimeUrl(String animeUrl) {
-    this.animeUrl = animeUrl;
-  }
-
-  public String getAnimeImagePath() {
-    return animeImagePath;
-  }
-
-  public void setAnimeImagePath(String animeImagePath) {
-    this.animeImagePath = animeImagePath;
-  }
-
-  public Boolean getAddedToList() {
-    return isAddedToList;
-  }
-
-  public void setAddedToList(Boolean addedToList) {
-    isAddedToList = addedToList;
-  }
-
-  public String getAnimeMediaTypeString() {
-    return animeMediaTypeString;
-  }
-
-  public void setAnimeMediaTypeString(String animeMediaTypeString) {
-    this.animeMediaTypeString = animeMediaTypeString;
-  }
-
-  public String getAnimeMpaaRatingString() {
-    return animeMpaaRatingString;
-  }
-
-  public void setAnimeMpaaRatingString(String animeMpaaRatingString) {
-    this.animeMpaaRatingString = animeMpaaRatingString;
-  }
-
-  public String getStartDateString() {
-    return startDateString;
-  }
-
-  public void setStartDateString(String startDateString) {
-    this.startDateString = startDateString;
-  }
-
-  public String getFinishDateString() {
-    return finishDateString;
-  }
-
-  public void setFinishDateString(String finishDateString) {
-    this.finishDateString = finishDateString;
-  }
-
-  public String getAnimeStartDateString() {
-    return animeStartDateString;
-  }
-
-  public void setAnimeStartDateString(String animeStartDateString) {
-    this.animeStartDateString = animeStartDateString;
-  }
-
-  public String getAnimeEndDateString() {
-    return animeEndDateString;
-  }
-
-  public void setAnimeEndDateString(String animeEndDateString) {
-    this.animeEndDateString = animeEndDateString;
-  }
-
-  public String getDaysString() {
-    return daysString;
-  }
-
-  public void setDaysString(String daysString) {
-    this.daysString = daysString;
-  }
-
-  public String getStorageString() {
-    return storageString;
-  }
-
-  public void setStorageString(String storageString) {
-    this.storageString = storageString;
-  }
-
-  public String getPriorityRating() {
-    return priorityRating;
-  }
-
-  public void setPriorityRating(String priorityRating) {
-    this.priorityRating = priorityRating;
-  }
-
-  public String getNotes() {
-    return notes;
-  }
-
-  public void setNotes(String notes) {
-    this.notes = notes;
-  }
-
-  public String getEditableNotes() {
-    return editableNotes;
-  }
-
-  public void setEditableNotes(String editableNotes) {
-    this.editableNotes = editableNotes;
+  public void setUserAnimeFinishDate(LocalDate userAnimeFinishDate) {
+    this.userAnimeFinishDate = userAnimeFinishDate;
   }
 }

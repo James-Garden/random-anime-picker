@@ -22,7 +22,8 @@ public class WelcomeController {
 
   @Autowired
   WelcomeController(WelcomeFormValidator welcomeFormValidator,
-                    MalUserService malUserService, ListUpdateService listUpdateService) {
+                    MalUserService malUserService,
+                    ListUpdateService listUpdateService) {
     this.welcomeFormValidator = welcomeFormValidator;
     this.malUserService = malUserService;
     this.listUpdateService = listUpdateService;

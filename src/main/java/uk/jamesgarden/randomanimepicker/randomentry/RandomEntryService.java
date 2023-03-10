@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.jamesgarden.randomanimepicker.listentry.ListEntry;
 import uk.jamesgarden.randomanimepicker.listentry.ListEntryService;
-import uk.jamesgarden.randomanimepicker.listentry.ListEntryStatus;
+import uk.jamesgarden.randomanimepicker.listentry.enums.ListEntryStatus;
 import uk.jamesgarden.randomanimepicker.maluser.MalUser;
 
 @Service
@@ -27,7 +27,7 @@ class RandomEntryService {
       return Optional.empty();
     }
     var filteredList = listEntries.stream()
-        .filter(listEntry -> ListEntryStatus.PLANNED.equals(listEntry.getStatus()))
+        .filter(listEntry -> ListEntryStatus.PLAN_TO_WATCH.equals(listEntry.getListEntryStatus()))
         .toList();
     if (filteredList.isEmpty()) {
       return Optional.empty();

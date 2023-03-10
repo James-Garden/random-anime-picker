@@ -1,0 +1,9 @@
+{
+  "groups": [
+    {
+      "name": "uk.jamesgarden",
+      "type": "uk.jamesgarden.randomanimepicker.configuration.MalApiConfiguration",
+      "sourceType": "uk.jamesgarden.randomanimepicker.configuration.MalApiConfiguration"
+    }
+  ]
+}

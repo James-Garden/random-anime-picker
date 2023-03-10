@@ -1,6 +1,6 @@
 package uk.jamesgarden.randomanimepicker.listupdate;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import java.io.IOException;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.jamesgarden.randomanimepicker.exception.InternalServerErrorException;
 import uk.jamesgarden.randomanimepicker.listentry.ListEntryService;
-import uk.jamesgarden.randomanimepicker.malrequest.ListEntryDto;
 import uk.jamesgarden.randomanimepicker.malrequest.MalRequestService;
+import uk.jamesgarden.randomanimepicker.malrequest.datatransferobjects.MalAnimeListEntryDto;
 import uk.jamesgarden.randomanimepicker.maluser.MalUser;
 import uk.jamesgarden.randomanimepicker.maluser.MalUserService;
 
@@ -47,16 +47,16 @@ public class ListUpdateService {
   }
 
   public void updateList(MalUser user) {
-    var listEntryDtos = getListEntryDtosOrThrow(user);
+    var listEntryDtos = getListEntryDtos(user);
     var listEntries = listEntryService.convertDtosToEntities(user, listEntryDtos);
     listEntryService.updateListForUser(user, listEntries);
     malUserService.setLastUpdatedToNow(user);
   }
 
-  private List<ListEntryDto> getListEntryDtosOrThrow(MalUser malUser) {
+  private List<MalAnimeListEntryDto> getListEntryDtos(MalUser malUser) {
     try {
       return malRequestService.getUserList(malUser.getUsername());
-    } catch (JsonProcessingException e) {
+    } catch (IOException | InterruptedException e) {
       var error = "Could not process list for MalUser with ID [%s]".formatted(malUser.getId().toString());
       LOGGER.error(error);
       throw new InternalServerErrorException(error);

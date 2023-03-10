@@ -123,6 +123,12 @@ td {
     color: grey;
 }
 
+/* Secondary text */
+
+.secondary-text {
+    color: grey;
+}
+
 /* Secondary link */
 
 .secondary-link {
@@ -149,4 +155,10 @@ td {
 div.my-anime-list-link {
     padding: 10px;
     text-align: center;
+}
+
+/* Back link */
+
+div.back-link {
+    padding: 10px;
 }
