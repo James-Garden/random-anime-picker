@@ -5,7 +5,15 @@
 <#include 'layout/base.ftl'>
 
 <#if listEntry.isPresent()>
-    <#assign pageTitle=listEntry.get().animeTitleEnglish!listEntry.get().animeTitle>
+  <#if listEntry.get().animeTitleEnglish?has_content>
+    <#assign pageTitle=listEntry.get().animeTitleEnglish>
+  <#elseif listEntry.get().animeTitle?has_content>
+    <#assign pageTitle=listEntry.get().animeTitle>
+  <#elseif listEntry.get().animeTitleJapanese?has_content>
+    <#assign pageTitle=listEntry.get().animeTitleJapanese>
+  <#else>
+    <#assign pageTitle="Missing title">
+  </#if>
 </#if>
 
 
@@ -82,7 +90,7 @@
   </div>
   <#if listEntry.animeId?has_content>
     <div class="my-anime-list-link">
-      <a href="https://myanimelist.net/anime/${listEntry.animeId}" class="secondary-link">View on MyAnimeList</a>
+      <a href="https://myanimelist.net/anime/${listEntry.animeId?c}" class="secondary-link">View on MyAnimeList</a>
     </div>
   </#if>
 </#macro>
