@@ -85,7 +85,6 @@ div.anime-image {
 }
 
 img.anime-image {
-    max-width: 350px;
     max-height: 450px;
     width: 100%;
 }
