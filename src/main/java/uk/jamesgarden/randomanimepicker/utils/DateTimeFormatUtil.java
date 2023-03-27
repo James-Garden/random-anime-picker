@@ -1,6 +1,5 @@
 package uk.jamesgarden.randomanimepicker.utils;
 
-import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import org.ocpsoft.prettytime.PrettyTime;
@@ -18,7 +17,7 @@ public class DateTimeFormatUtil {
     return DATE_FORMATTER.format(zonedDateTime);
   }
 
-  public static String formatTimeSince(Instant instant) {
-    return TIME_SINCE_FORMATTER.format(instant);
+  public static String formatTimeSince(ZonedDateTime zonedDateTime) {
+    return TIME_SINCE_FORMATTER.format(zonedDateTime);
   }
 }

@@ -5,7 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Entity
@@ -18,7 +18,7 @@ public class MalUser {
   
   private String username;
   
-  private Instant lastUpdated;
+  private ZonedDateTime lastUpdated;
 
   public MalUser() {
   }
@@ -35,15 +35,11 @@ public class MalUser {
     return username;
   }
 
-  void setUsername(String username) {
-    this.username = username;
-  }
-
-  public Instant getLastUpdated() {
+  public ZonedDateTime getLastUpdated() {
     return lastUpdated;
   }
 
-  void setLastUpdated(Instant lastUpdated) {
+  void setLastUpdated(ZonedDateTime lastUpdated) {
     this.lastUpdated = lastUpdated;
   }
 }

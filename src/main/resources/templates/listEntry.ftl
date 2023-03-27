@@ -1,19 +1,15 @@
-<#-- @ftlvariable name="username" type="String" -->
-<#-- @ftlvariable name="listEntry" type="uk.jamesgarden.randomanimepicker.listentry.ListEntry" -->
-<#-- @ftlvariable name="addedToList" type="String" -->
+<#-- @ftlvariable name="randomEntry" type="uk.jamesgarden.randomanimepicker.randomentry.RandomEntryView" -->
 
 <#include 'layout/base.ftl'>
 
-<#if listEntry.isPresent()>
-  <#if listEntry.get().animeTitleEnglish?has_content>
-    <#assign pageTitle=listEntry.get().animeTitleEnglish>
-  <#elseif listEntry.get().animeTitle?has_content>
-    <#assign pageTitle=listEntry.get().animeTitle>
-  <#elseif listEntry.get().animeTitleJapanese?has_content>
-    <#assign pageTitle=listEntry.get().animeTitleJapanese>
-  <#else>
-    <#assign pageTitle="Missing title">
-  </#if>
+<#if randomEntry.englishTitle()?has_content>
+  <#assign pageTitle=randomEntry.englishTitle()>
+<#elseif randomEntry.animeTitle()?has_content>
+  <#assign pageTitle=randomEntry.animeTitle()>
+<#elseif randomEntry.japaneseTitle()?has_content>
+  <#assign pageTitle=randomEntry.japaneseTitle()>
+<#else>
+  <#assign pageTitle="Random Anime Picker">
 </#if>
 
 
@@ -38,8 +34,8 @@
         </@forms.htmlForm>
       </span>
     </div>
-    <#if listEntry.isPresent()>
-      <@listEntryContent listEntry=listEntry.get() />
+    <#if !randomEntry.isEmpty()>
+      <@listEntryContent randomEntry=randomEntry />
     <#else>
       <div class="list-entry-inner-wrapper">
         <h1>Could not find matching entries</h1>
@@ -48,38 +44,38 @@
   </div>
 </@baseTemplate>
 
-<#macro listEntryContent listEntry>
-<#-- @ftlvariable name="listEntry" type="uk.jamesgarden.randomanimepicker.listentry.ListEntry" -->
+<#macro listEntryContent randomEntry>
+<#-- @ftlvariable name="randomEntry" type="uk.jamesgarden.randomanimepicker.randomentry.RandomEntryView" -->
   <div class="list-entry-inner-wrapper">
     <div class="anime-image">
       <@image.image
-        imageUrl=listEntry.animeImage
-        altText=listEntry.animeTitle!"Unknown"
+        imageUrl=randomEntry.animeImageUrl()!"https://via.placeholder.com/350x450.png?text=NOT%20FOUND"
+        altText=randomEntry.animeTitle()!"Image not found"
         class="anime-image"
       />
     </div>
     <div class="anime-info">
-      <#if listEntry.animeTitleEnglish?has_content>
+      <#if randomEntry.englishTitle()?has_content>
         <div class="anime-title">
-          <h1>${listEntry.animeTitleEnglish}</h1>
+          <h1>${randomEntry.englishTitle()}</h1>
         </div>
-        <#if listEntry.animeTitleJapanese?has_content && (listEntry.animeTitleJapanese != listEntry.animeTitleEnglish)>
+        <#if randomEntry.japaneseTitle()?has_content && (randomEntry.japaneseTitle() != randomEntry.englishTitle())>
           <div class="anime-title-jp">
-            <h2>${listEntry.animeTitleJapanese}</h2>
+            <h2>${randomEntry.japaneseTitle()}</h2>
           </div>
         </#if>
       <#else>
         <div class="anime-title">
-          <h1>${listEntry.animeTitle}</h1>
+          <h1>${randomEntry.animeTitle()!"Title not found"}</h1>
         </div>
       </#if>
       <@table.table class="anime-details">
-        <@table.simpleRow keyText="Status" valueText=listEntry.listEntryStatus.displayName />
-        <@table.simpleRow keyText="Score" valueText=listEntry.animeAverageScore!"" />
-        <@table.simpleRow keyText="Number of Episodes" valueText=listEntry.animeNumEpisodes!"" />
-        <@table.simpleRow keyText="Date Added to List" valueText=addedToList!"" />
-        <@table.simpleRow keyText="Airing Status" valueText=listEntry.airingStatus.displayName />
-        <@table.simpleRow keyText="Age Rating" valueText=listEntry.ageRating.displayName />
+        <@table.simpleRow keyText="Status" valueText=randomEntry.watchingStatus()!"" />
+        <@table.simpleRow keyText="Score" valueText=randomEntry.communityScore()!"" />
+        <@table.simpleRow keyText="Number of Episodes" valueText=randomEntry.numberOfEpisodes()!"" />
+        <@table.simpleRow keyText="Date Added to List" valueText=randomEntry.dateAddedToList()!"" />
+        <@table.simpleRow keyText="Airing Status" valueText=randomEntry.airingStatus()!"" />
+        <@table.simpleRow keyText="Age Rating" valueText=randomEntry.ageRating()!"" />
       </@table.table>
     </div>
   </div>
@@ -88,9 +84,9 @@
       <@forms.submitButton preventDoubleClick=true>Go!</@forms.submitButton>
     </@forms.htmlForm>
   </div>
-  <#if listEntry.animeId?has_content>
+  <#if randomEntry.animeId()?has_content>
     <div class="my-anime-list-link">
-      <a href="https://myanimelist.net/anime/${listEntry.animeId?c}" class="secondary-link">View on MyAnimeList</a>
+      <a href="https://myanimelist.net/anime/${randomEntry.animeId()?c}" class="secondary-link">View on MyAnimeList</a>
     </div>
   </#if>
 </#macro>
