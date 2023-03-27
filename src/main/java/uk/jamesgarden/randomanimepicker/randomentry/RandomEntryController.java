@@ -30,15 +30,11 @@ class RandomEntryController {
   @GetMapping
   ModelAndView renderRandomListEntry(@PathVariable("username") String username) {
     var user = malUserService.getByUsername(username);
-    var listEntryOptional = randomEntryService.getRandomListEntryForUser(user);
-    var addedToList = listEntryOptional
-        .map(listEntry -> DateTimeFormatUtil.formatZonedDateTime(listEntry.getUserAnimeUpdatedAtDateTime()))
-        .orElse("");
+    var randomEntryView = randomEntryService.getRandomEntryView(user);
 
     return new ModelAndView("listEntry")
         .addObject("username", username)
-        .addObject("listEntry", listEntryOptional)
-        .addObject("addedToList", addedToList)
+        .addObject("randomEntry", randomEntryView)
         .addObject("updateListUrl", "/%s/update-list".formatted(username))
         .addObject("lastUpdated", DateTimeFormatUtil.formatTimeSince(user.getLastUpdated()))
         .addObject("isListUpdatable", listUpdateService.isListUpdatable(user));

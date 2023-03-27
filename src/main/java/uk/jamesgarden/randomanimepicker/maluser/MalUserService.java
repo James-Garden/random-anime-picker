@@ -2,6 +2,7 @@ package uk.jamesgarden.randomanimepicker.maluser;
 
 import jakarta.transaction.Transactional;
 import java.time.Clock;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,8 @@ public class MalUserService {
 
   @Transactional
   public void setLastUpdatedToNow(MalUser user) {
-    user.setLastUpdated(clock.instant());
+    var now = ZonedDateTime.ofInstant(clock.instant(), clock.getZone());
+    user.setLastUpdated(now);
     malUserRepository.save(user);
   }
 
