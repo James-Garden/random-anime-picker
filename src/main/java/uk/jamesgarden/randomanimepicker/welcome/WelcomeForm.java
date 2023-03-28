@@ -1,5 +1,7 @@
 package uk.jamesgarden.randomanimepicker.welcome;
 
+import java.util.Objects;
+
 public class WelcomeForm {
 
   private String username;
@@ -9,6 +11,10 @@ public class WelcomeForm {
   }
 
   public void setUsername(String username) {
-    this.username = username;
+    if (Objects.nonNull(username)) {
+      this.username = username.strip();
+      return;
+    }
+    this.username = null;
   }
 }
